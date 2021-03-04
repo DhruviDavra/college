@@ -8,16 +8,16 @@ class UserProvider extends ChangeNotifier {
     FirebaseFirestore.instance.collection("tbl_users");
   }
 
-  addUser(UserObj userObj) {
+  addUser(UserInfoObj userObj) {
     UserProvider.createUserTable();
     FirebaseFirestore.instance.collection("tbl_users").add({
+      "uid": userObj.uid,
       "fname": userObj.fname,
       "mname": userObj.mname,
       "lname": userObj.lname,
       "dob": userObj.dob,
       "cno": userObj.cno,
       "email": userObj.email,
-      "uname": userObj.uname,
       "password": userObj.password,
       "utype": userObj.utype
     });
