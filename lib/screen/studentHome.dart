@@ -16,7 +16,7 @@ class _StudentHomeState extends State<StudentHome> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text('TMTBCA'),
+            title: Text('student'),
           ),
           drawer: Drawer(
             child: ListView(
@@ -62,49 +62,21 @@ class _StudentHomeState extends State<StudentHome> {
                     Icons.people,
                   ),
                   title: Text(
-                    'Staff',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.people,
-                  ),
-                  title: Text(
-                    'Students',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.article,
-                  ),
-                  title: Text(
-                    'Semester',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.ballot,
-                  ),
-                  title: Text(
                     'Seminar',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.app_registration,
+                  ),
+                  title: Text(
+                    'Attendence',
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -118,7 +90,7 @@ class _StudentHomeState extends State<StudentHome> {
                     Icons.announcement,
                   ),
                   title: Text(
-                    'Announcements',
+                    'Announcement',
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -129,10 +101,38 @@ class _StudentHomeState extends State<StudentHome> {
                 ),
                 ListTile(
                   leading: Icon(
-                    Icons.bookmark,
+                    Icons.ballot,
                   ),
                   title: Text(
-                    'Feedbacks',
+                    'Assignment',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.book_online_sharp,
+                  ),
+                  title: Text(
+                    'E-book',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.sticky_note_2_outlined,
+                  ),
+                  title: Text(
+                    'Syllabus',
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -160,7 +160,7 @@ class _StudentHomeState extends State<StudentHome> {
                     Icons.report,
                   ),
                   title: Text(
-                    'Reports',
+                    'Feedback',
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -174,7 +174,7 @@ class _StudentHomeState extends State<StudentHome> {
                     Icons.vpn_key,
                   ),
                   title: Text(
-                    'Change Password',
+                    'About App',
                     style: TextStyle(
                       fontSize: 16,
                     ),

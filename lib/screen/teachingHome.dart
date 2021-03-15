@@ -16,7 +16,7 @@ class _TeachingHomeState extends State<TeachingHome> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text('TMTBCA'),
+            title: Text('teaching'),
           ),
           drawer: Drawer(
             child: ListView(
