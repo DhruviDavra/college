@@ -638,11 +638,11 @@ class _StaffState extends State<Staff> {
                           teachingStaffObject.experience = experienceCon.text;
                           print(teachingStaffObject.qualification);
                           _isEdit
-                              ? Provider.of<TeachingStaffProvider>(context,
+                              ? await Provider.of<TeachingStaffProvider>(context,
                                       listen: false)
                                   .update(emailCon.text, userInfoObj,
                                       teachingStaffObject)
-                              : insert();
+                              :await insert();
 
                           setState(() {
                             userAll.clear();

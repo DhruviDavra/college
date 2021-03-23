@@ -1,13 +1,20 @@
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/userProvider.dart';
+import 'package:college_management_system/providers/seminarProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:college_management_system/providers/teachingStaffProvider.dart';
+import 'package:college_management_system/providers/feedbackProvider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'adminProfile.dart';
 import 'changePassword.dart';
 import 'homeScreen.dart';
 import 'manageStaff.dart';
+import 'manageSeminar.dart';
+import 'manageNotice.dart';
+import 'manageFeedback.dart';
+import 'manageAdminLeave.dart';
 
 class AdminHome extends StatefulWidget {
   @override
@@ -16,28 +23,35 @@ class AdminHome extends StatefulWidget {
 
 class _AdminHomeState extends State<AdminHome> {
   String uname = 'User Name';
-  String totalStaff=" ";
+  String totalStaff = " ";
+  String totalSeminar = " ";
+  String totalFeedback = " ";
   bool isLoading = false;
   UserInfoObj userObj = UserInfoObj();
 
   @override
   void initState() {
-     super.initState();
+    super.initState();
     callUserData();
-   
   }
 
   callUserData() async {
     userObj =
         await Provider.of<UserProvider>(context, listen: false).getUserDetail();
-         totalStaff= await Provider.of<TeachingStaffProvider>(context,listen: false).countStaff();
-  
-          setState(()  {
+    totalStaff =
+        await Provider.of<TeachingStaffProvider>(context, listen: false)
+            .countStaff();
+
+    totalSeminar = await Provider.of<SeminarProvider>(context, listen: false)
+        .countSeminar();
+
+    totalFeedback = await Provider.of<FeedbackProvider>(context, listen: false)
+        .countFeedback();
+
+    setState(() {
       uname = userObj.fname + ' ' + userObj.mname + ' ' + userObj.lname;
-   
     });
-     print(uname);
-  
+    print(uname);
   }
 
   @override
@@ -49,6 +63,7 @@ class _AdminHomeState extends State<AdminHome> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             title: Text('TMTBCA'),
           ),
           drawer: drawer(),
@@ -205,46 +220,52 @@ class _AdminHomeState extends State<AdminHome> {
                             ),
                           ],
                         ),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/feedback.JPG',
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  // width: MediaQuery.of(context).size.height * 0.06,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    FittedBox(
-                                      child: Text(
-                                        "Feedback",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => FeedbackAdmin()));
+                          },
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/feedback.JPG',
+                                    height: MediaQuery.of(context).size.height *
+                                        0.06,
+                                    // width: MediaQuery.of(context).size.height * 0.06,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      FittedBox(
+                                        child: Text(
+                                          "Feedback",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text("42"),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(totalFeedback),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
@@ -260,46 +281,52 @@ class _AdminHomeState extends State<AdminHome> {
                             ),
                           ],
                         ),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/teaching.JPG',
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  // width: MediaQuery.of(context).size.height * 0.06,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    FittedBox(
-                                      child: Text(
-                                        "Seminar",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Seminar()));
+                          },
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/teaching.JPG',
+                                    height: MediaQuery.of(context).size.height *
+                                        0.06,
+                                    // width: MediaQuery.of(context).size.height * 0.06,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      FittedBox(
+                                        child: Text(
+                                          "Seminar",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text("30"),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(totalSeminar),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -386,7 +413,7 @@ class _AdminHomeState extends State<AdminHome> {
                                 Image.asset(
                                   'assets/images/notice.JPG',
                                   height:
-                                      MediaQuery.of(context).size.height * 0.07,
+                                      MediaQuery.of(context).size.height * 0.05,
                                   // width: MediaQuery.of(context).size.height * 0.06,
                                 ),
                               ],
@@ -396,13 +423,11 @@ class _AdminHomeState extends State<AdminHome> {
                               children: [
                                 Row(
                                   children: [
-                                    FittedBox(
-                                      child: Text(
-                                        " Notice",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
+                                    AutoSizeText(
+                                      "Announcements",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
                                     ),
                                   ],
                                 ),
@@ -656,7 +681,8 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Seminar()));
             },
           ),
           ListTile(
@@ -670,7 +696,8 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Notice()));
             },
           ),
           ListTile(
@@ -684,7 +711,8 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => FeedbackAdmin()));
             },
           ),
           ListTile(
@@ -698,7 +726,8 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+             Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => AdminLeave()));
             },
           ),
           ListTile(

@@ -13,7 +13,6 @@ class TeachingStaffProvider extends ChangeNotifier {
   String profileEmail;
 
   List<TeachingStaffObject> teachingDetails = [];
-  Map<UserInfoObj, TeachingStaffObject> allDetail;
   List<UserInfoObj> userDetails = [];
 
   addTeachingStaff(TeachingStaffObject teachingStaff) {
@@ -94,7 +93,7 @@ class TeachingStaffProvider extends ChangeNotifier {
     );
   }
 
-  update(String email, UserInfoObj userInfoObj,
+ Future<void> update(String email, UserInfoObj userInfoObj,
       TeachingStaffObject teachingStaffObject) async {
     await updateStaff(email, teachingStaffObject);
    await  updateUser(email, userInfoObj);
