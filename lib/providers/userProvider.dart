@@ -24,7 +24,8 @@ class UserProvider extends ChangeNotifier {
   // }
 
   addUser(UserInfoObj userObj) {
-    UserProvider.createUserTable();
+   try{
+      UserProvider.createUserTable();
     FirebaseFirestore.instance.collection("tbl_users").add({
       "uid": userObj.uid,
       "fname": userObj.fname,
@@ -36,6 +37,10 @@ class UserProvider extends ChangeNotifier {
       "password": userObj.password,
       "utype": userObj.utype
     });
+   }
+   catch(e){
+     throw e;
+   }
   }
 
   Future<dynamic> signIn(String email, String pwd) async {

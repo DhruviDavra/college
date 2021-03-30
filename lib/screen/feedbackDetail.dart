@@ -18,7 +18,9 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
 
   FeedbackObject feedbackObject = FeedbackObject();
   String email;
+  String time;
   bool _isLoading = false;
+  bool _isStudent = false;
   @override
   void initState() {
     super.initState();
@@ -31,11 +33,22 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
       setState(() {
         _isLoading = true;
       });
-
+    _isStudent =
+        Provider.of<FeedbackProvider>(context, listen: false).isStudent;
     email = Provider.of<FeedbackProvider>(context, listen: false).email;
+    
+    time = Provider.of<FeedbackProvider>(context, listen: false).time;
     // print(email);
-    feedbackObject = await Provider.of<FeedbackProvider>(context, listen: false)
-        .getParticularfeedback(email);
+
+    if (_isStudent == true) {
+      feedbackObject =
+          await Provider.of<FeedbackProvider>(context, listen: false)
+              .getParticularfeedbackStudentWise(time);
+    } else {
+      feedbackObject =
+          await Provider.of<FeedbackProvider>(context, listen: false)
+              .getParticularfeedback(email);
+    }
 
     if (mounted)
       setState(() {

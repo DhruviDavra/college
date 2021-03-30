@@ -1,4 +1,5 @@
 import 'package:college_management_system/objects/usersObject.dart';
+import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
 import 'package:college_management_system/providers/seminarProvider.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ import 'manageSeminar.dart';
 import 'manageNotice.dart';
 import 'manageFeedback.dart';
 import 'manageAdminLeave.dart';
+import 'manageStudentHome.dart';
+import 'manageSemester.dart';
 
 class AdminHome extends StatefulWidget {
   @override
@@ -26,6 +29,7 @@ class _AdminHomeState extends State<AdminHome> {
   String totalStaff = " ";
   String totalSeminar = " ";
   String totalFeedback = " ";
+  String totalNotice=" ";
   bool isLoading = false;
   UserInfoObj userObj = UserInfoObj();
 
@@ -48,6 +52,8 @@ class _AdminHomeState extends State<AdminHome> {
     totalFeedback = await Provider.of<FeedbackProvider>(context, listen: false)
         .countFeedback();
 
+totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
+        .countNotice();
     setState(() {
       uname = userObj.fname + ' ' + userObj.mname + ' ' + userObj.lname;
     });
@@ -405,44 +411,49 @@ class _AdminHomeState extends State<AdminHome> {
                             ),
                           ],
                         ),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/notice.JPG',
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
-                                  // width: MediaQuery.of(context).size.height * 0.06,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    AutoSizeText(
-                                      "Announcements",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                // Row(
-                                //   children: [
-                                //     Text("79%"),
-                                //   ],
-                                // ),
-                              ],
-                            )
-                          ],
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AdminNotice()));
+                          },
+                                                  child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/notice.JPG',
+                                    height:
+                                        MediaQuery.of(context).size.height * 0.05,
+                                    // width: MediaQuery.of(context).size.height * 0.06,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      AutoSizeText(
+                                        "Announcements",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height * 0.01,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(totalNotice),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -595,7 +606,7 @@ class _AdminHomeState extends State<AdminHome> {
                   Icon(
                     Icons.account_circle,
                     size: MediaQuery.of(context).size.height * 0.08,
-                    color: Colors.blue,
+                    color: Colors.blueGrey,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.02,
@@ -653,7 +664,9 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => StudentAdminHome(),
+              ));
             },
           ),
           ListTile(
@@ -667,7 +680,7 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Semester()));
             },
           ),
           ListTile(
@@ -697,7 +710,7 @@ class _AdminHomeState extends State<AdminHome> {
             ),
             onTap: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Notice()));
+                  .push(MaterialPageRoute(builder: (context) => AdminNotice()));
             },
           ),
           ListTile(
@@ -726,8 +739,8 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-             Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AdminLeave()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => AdminLeave()));
             },
           ),
           ListTile(

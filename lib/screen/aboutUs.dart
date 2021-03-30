@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'homeScreen.dart';
 import 'package:blinking_text/blinking_text.dart';
 
-class Aboutus extends StatefulWidget {
+class AboutUs extends StatefulWidget {
   @override
-  _AboutusState createState() => _AboutusState();
+  _AboutUsState createState() => _AboutUsState();
 }
 
-class _AboutusState extends State<Aboutus> {
+class _AboutUsState extends State<AboutUs> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -22,6 +22,7 @@ class _AboutusState extends State<Aboutus> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {

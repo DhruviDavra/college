@@ -15,6 +15,7 @@ class FeedbackAdmin extends StatefulWidget {
 class _FeedbackAdminState extends State<FeedbackAdmin> {
   bool _isLoading = false;
   void navigateToPage(BuildContext context) async {
+    data.clear();
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
   }

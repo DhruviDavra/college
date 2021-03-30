@@ -101,7 +101,7 @@ class _SeminarState extends State<Seminar> {
                 navigateToPage(context);
               },
             ),
-            title: Text('Announcements'),
+            title: Text('Seminars'),
           ),
           body: SingleChildScrollView(
             child: Container(

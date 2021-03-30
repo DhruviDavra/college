@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import './adminHome.dart';
 import 'nonTeachingHome.dart';
 import './forgotPassword.dart';
-import 'signup.dart';
+import 'manageNotice.dart';
 
 class HomeScreen extends StatefulWidget {
   
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Icon(
                           Icons.account_circle,
                           size: MediaQuery.of(context).size.height * 0.09,
-                          color: Colors.blue,
+                          color: Colors.blueGrey,
                         ),
                       ),
                       SizedBox(
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          color: Colors.blue,
+                          color: Colors.blueGrey,
                           onPressed: () async {
                             try {
                               // print(emailCon.text);
@@ -264,13 +264,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Signup()));
-                        },
-                        child: Text("Sign up"),
-                      ),
+                     FlatButton(child: Text("Notice"),
+                     onPressed: (){
+                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AdminNotice()));
+                     },),
                     ],
                   ),
                 ),

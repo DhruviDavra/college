@@ -3,12 +3,12 @@ import 'homeScreen.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Contactus extends StatefulWidget {
+class ContactUs extends StatefulWidget {
   @override
-  _ContactusState createState() => _ContactusState();
+  _ContactUsState createState() => _ContactUsState();
 }
 
-class _ContactusState extends State<Contactus> {
+class _ContactUsState extends State<ContactUs> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -36,6 +36,7 @@ class _ContactusState extends State<Contactus> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -60,7 +61,7 @@ class _ContactusState extends State<Contactus> {
                             'Contact Us',
                             style: TextStyle(fontSize: 30),
                             beginColor: Colors.blue[600],
-                            endColor: Colors.red,
+                            endColor: Colors.blueGrey,
                             times: 500,
                             //durtaion: Duration(milliseconds: 500)
                           ),

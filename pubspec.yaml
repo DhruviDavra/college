@@ -26,6 +26,7 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^0.5.12+4
+  flutter_plugin_pdf_viewer: ^1.0.7
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -42,7 +43,12 @@ dependencies:
   url_launcher: ^5.4.0
   firebase_storage: ^5.0.1
   auto_size_text: ^2.1.0
-  
+  file_picker: ^1.12.0
+  permission_handler: ^5.0.1+1
+  path_provider: ^1.6.8
+  flutter_full_pdf_viewer: ^1.0.6
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -73,6 +79,10 @@ flutter:
     - assets/images/logo.png
     - assets/images/right.JPG
     - assets/images/wrong.JPG
+    - assets/images/delete.png
+    - assets/images/facebook.JPG
+    - assets/images/instragram.JPG
+    - assets/images/mail.JPG
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -19,7 +19,7 @@ class StudentObject {
         this.acadamicYear,
     });
 
-    String rno;
+    int rno;
     String email;
     String enrollno;
     String div;

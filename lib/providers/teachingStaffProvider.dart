@@ -41,14 +41,15 @@ class TeachingStaffProvider extends ChangeNotifier {
     } //for
     return teachingDetails;
 
-    //print(querySnapshot.docs[0].data()["dob"]);
+  
   }
 
   Future<List<UserInfoObj>> getUserDetail() async {
     QuerySnapshot teachingData =
         await FirebaseFirestore.instance.collection("tbl_teachingStaff").get();
-    // print(teachingData.docs.length);
+   
     for (int i = 0; i < teachingData.docs.length; i++) {
+      //  print("debug Email: "+teachingData.docs[i].data()["email"]);
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("tbl_users")
           .where("email", isEqualTo: teachingData.docs[i].data()["email"])

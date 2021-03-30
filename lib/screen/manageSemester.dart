@@ -7,12 +7,12 @@ import 'package:college_management_system/objects/semesterObject.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
 import 'manageStudent.dart';
 
-class StudentAdminHome extends StatefulWidget {
+class Semester extends StatefulWidget {
   @override
-  _StudentAdminHomeState createState() => _StudentAdminHomeState();
+  _SemesterState createState() => _SemesterState();
 }
 
-class _StudentAdminHomeState extends State<StudentAdminHome> {
+class _SemesterState extends State<Semester> {
   void navigateToPage(BuildContext context) async {
     semester.clear();
 
