@@ -29,7 +29,7 @@ class _AdminHomeState extends State<AdminHome> {
   String totalStaff = " ";
   String totalSeminar = " ";
   String totalFeedback = " ";
-  String totalNotice=" ";
+  String totalNotice = " ";
   bool isLoading = false;
   UserInfoObj userObj = UserInfoObj();
 
@@ -52,8 +52,8 @@ class _AdminHomeState extends State<AdminHome> {
     totalFeedback = await Provider.of<FeedbackProvider>(context, listen: false)
         .countFeedback();
 
-totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
-        .countNotice();
+    totalNotice =
+        await Provider.of<NoticeProvider>(context, listen: false).countNotice();
     setState(() {
       uname = userObj.fname + ' ' + userObj.mname + ' ' + userObj.lname;
     });
@@ -68,6 +68,7 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
+          backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
             backgroundColor: Colors.blueGrey[700],
             title: Text('TMTBCA'),
@@ -412,18 +413,19 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
                           ],
                         ),
                         child: InkWell(
-                          onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AdminNotice()));
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AdminNotice()));
                           },
-                                                  child: Row(
+                          child: Row(
                             children: [
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/images/notice.JPG',
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.05,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05,
                                     // width: MediaQuery.of(context).size.height * 0.06,
                                   ),
                                 ],
@@ -442,8 +444,8 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
                                     ],
                                   ),
                                   SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.01,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.01,
                                   ),
                                   Row(
                                     children: [
@@ -600,7 +602,11 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
       child: ListView(
         children: [
           DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[50],
+            ),
             child: Container(
+              //color: Colors.blueGrey[50],
               child: Column(
                 children: [
                   Icon(
@@ -621,6 +627,7 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
               ),
             ),
           ),
+          
           ListTile(
             leading: Icon(
               Icons.account_circle,
@@ -637,6 +644,7 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
               ));
             },
           ),
+          
           ListTile(
             leading: Icon(
               Icons.people,
@@ -653,6 +661,7 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
               ));
             },
           ),
+          
           ListTile(
             leading: Icon(
               Icons.people,
@@ -680,7 +689,8 @@ totalNotice=await Provider.of<NoticeProvider>(context, listen: false)
               ),
             ),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Semester()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Semester()));
             },
           ),
           ListTile(

@@ -25,7 +25,6 @@ class StudentProvider extends ChangeNotifier {
         "enrollno": studentObject.enrollno,
         "div": studentObject.div,
         "sem": studentObject.sem,
-        "year": studentObject.year,
         "acadamic-year": studentObject.acadamicYear,
       });
     } catch (e) {

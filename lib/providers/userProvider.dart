@@ -13,6 +13,7 @@ class UserProvider extends ChangeNotifier {
     FirebaseFirestore.instance.collection("tbl_users");
   }
 
+//bool get isUserLoggedin=>get
   String eMsg = " ";
   String userId;
   String utype = " ";
@@ -60,8 +61,12 @@ class UserProvider extends ChangeNotifier {
         eMsg = 'Wrong password provided for that user.';
         print(eMsg);
       }
+      if(eMsg.isEmpty){
+        eMsg="Something Went Wrong!!!";
+      }
       throw eMsg;
     } catch (e) {
+      
       print(e.toString());
       // return null;
       throw e;

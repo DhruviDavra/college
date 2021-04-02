@@ -47,6 +47,7 @@ class _AdminProfileState extends State<AdminProfile> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -66,12 +67,12 @@ class _AdminProfileState extends State<AdminProfile> {
                     "Profile",
                     style: TextStyle(
                       fontSize: 30,
-                      color: Colors.blue,
+                      color: Colors.blueGrey,
                     ),
                   ),
                   Icon(
                     Icons.account_circle_sharp,
-                    color: Colors.blue,
+                    color: Colors.blueGrey,
                     size: 100,
                   ),
                   SizedBox(

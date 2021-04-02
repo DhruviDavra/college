@@ -21,6 +21,7 @@ class _MyprofileState extends State<Myprofile> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -40,7 +41,7 @@ class _MyprofileState extends State<Myprofile> {
                     "Profile",
                     style: TextStyle(
                       fontSize: 30,
-                      color: Colors.blue,
+                      color: Colors.blueGrey[700],
                     ),
                   ),
                   Icon(

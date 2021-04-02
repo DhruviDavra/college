@@ -64,6 +64,7 @@ class _StaffProfileState extends State<StaffProfile> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -85,7 +86,7 @@ class _StaffProfileState extends State<StaffProfile> {
                         ),
                         Icon(
                           Icons.account_circle_sharp,
-                          color: Colors.blue,
+                          color: Colors.blueGrey,
                           size: 100,
                         ),
                         SizedBox(

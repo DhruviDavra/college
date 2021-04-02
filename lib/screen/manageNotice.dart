@@ -165,7 +165,7 @@ noticeAll.clear();
                                   ),
                                 ),
                                 height:
-                                    MediaQuery.of(context).size.height * 0.08,
+                                    MediaQuery.of(context).size.height * 0.09,
                                 width: MediaQuery.of(context).size.width * 0.01,
                                 decoration: BoxDecoration(
                                   color: Colors.white,

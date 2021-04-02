@@ -110,7 +110,7 @@ class _StaffState extends State<Staff> {
   }
 
   bool showfab = true;
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -120,12 +120,14 @@ class _StaffState extends State<Staff> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
                 navigateToPage(context);
               },
             ),
+            title: Text("Teaching Staff"),
           ),
           body: SingleChildScrollView(
             child: Container(
@@ -153,6 +155,7 @@ class _StaffState extends State<Staff> {
                                       builder: (context) => StaffProfile()));
                                 },
                                 child: Container(
+                                 
                                   child: Row(
                                     children: [
                                       SizedBox(
@@ -160,17 +163,27 @@ class _StaffState extends State<Staff> {
                                             MediaQuery.of(context).size.width *
                                                 0.01,
                                       ),
-                                      Text(userAll[i].fname +
-                                          " " +
-                                          userAll[i].mname +
-                                          " " +
-                                          userAll[i].lname),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            userAll[i].fname +
+                                                " " +
+                                                userAll[i].mname +
+                                                " " +
+                                                userAll[i].lname+"\n" ,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          Text( teachingAll[i].designation),
+                                        ],
+                                      ),
                                       Spacer(),
                                       editDeleteButton(i),
                                     ],
                                   ),
                                   height:
-                                      MediaQuery.of(context).size.height * 0.07,
+                                      MediaQuery.of(context).size.height * 0.08,
                                   width:
                                       MediaQuery.of(context).size.width * 0.01,
                                   decoration: BoxDecoration(
@@ -196,6 +209,7 @@ class _StaffState extends State<Staff> {
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
+            backgroundColor: Colors.blueGrey,
             onPressed: () {
               this.fnameCon.clear();
               this.mnameCon.clear();
@@ -238,7 +252,7 @@ class _StaffState extends State<Staff> {
           },
           child: Icon(
             Icons.edit,
-            color: Colors.blue,
+            color: Colors.blueGrey,
           ),
         ),
         SizedBox(
@@ -286,7 +300,8 @@ class _StaffState extends State<Staff> {
       ],
     );
   }
-   addStaff(BuildContext context) {
+
+  addStaff(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -499,7 +514,7 @@ class _StaffState extends State<Staff> {
                                       borderRadius: BorderRadius.circular(20),
                                       child: Container(
                                         height: 50.0,
-                                        color: Colors.blue,
+                                        color: Colors.blueGrey[600],
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
@@ -638,11 +653,12 @@ class _StaffState extends State<Staff> {
                           teachingStaffObject.experience = experienceCon.text;
                           print(teachingStaffObject.qualification);
                           _isEdit
-                              ? await Provider.of<TeachingStaffProvider>(context,
+                              ? await Provider.of<TeachingStaffProvider>(
+                                      context,
                                       listen: false)
                                   .update(emailCon.text, userInfoObj,
                                       teachingStaffObject)
-                              :await insert();
+                              : await insert();
 
                           setState(() {
                             userAll.clear();
@@ -696,5 +712,4 @@ class _StaffState extends State<Staff> {
       },
     );
   }
-
 }

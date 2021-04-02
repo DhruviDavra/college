@@ -31,6 +31,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -52,7 +53,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       "Change Password",
                       style: TextStyle(
                         fontSize: 30,
-                        color: Colors.blue,
+                        color: Colors.blueGrey,
                       ),
                     ),
                   ),
@@ -161,7 +162,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        color: Colors.blue,
+                        color: Colors.blueGrey[600],
                         onPressed: () {
                           print(oldPwdCon.text);
 

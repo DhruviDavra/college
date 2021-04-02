@@ -25,6 +25,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         },
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -43,7 +44,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   Text(
                     "Forgot Password",
-                    style: TextStyle(fontSize: 30, color: Colors.blue),
+                    style: TextStyle(fontSize: 30, color: Colors.blueGrey,),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   Text(
@@ -77,7 +78,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        color: Colors.blue,
+                        color: Colors.blueGrey[600],
                         onPressed: () async {
                           try {
                             await Provider.of<UserProvider>(context,

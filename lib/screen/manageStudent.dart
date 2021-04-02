@@ -6,6 +6,7 @@ import 'package:college_management_system/objects/studentObject.dart';
 import 'package:flutter/material.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Student extends StatefulWidget {
   @override
@@ -16,7 +17,22 @@ class _StudentState extends State<Student> {
   bool _isLoading = false;
   bool _isEdit = false;
   bool _isSelectedDiv = false;
+  List<int> yearList = [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+  ];
   String sem;
+  String selectedYear;
   void navigateToPage(BuildContext context) async {
     studentAll.clear();
     userAll.clear();
@@ -74,16 +90,38 @@ class _StudentState extends State<Student> {
   }
 
   Future<void> selectYear(BuildContext context) async {
-    final DateTime pickedDate = await showDatePicker(
-        context: context,
-                initialDate: currentDate,
-        firstDate: DateTime(1800),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
-      setState(() {
-        currentDate = pickedDate;
-        ayearCon.text = currentDate.toString().substring(0, 10);
-      });
+    Container(
+      margin: EdgeInsets.all(10),
+      child: DropdownButton<String>(
+        hint: Text("Academic Year"),
+        value: selectedYear,
+        items: yearList.map((int value) {
+          return DropdownMenuItem<String>(
+            value: value.toString(),
+            child: Text(value.toString()),
+          );
+        }).toList(),
+        onChanged: (String value) {
+          if (mounted) {
+            setState(() {
+              selectedYear = value;
+            });
+          }
+        },
+      ),
+    );
+    // final DateTime pickedDate = await showDatePicker(
+    //     context: context,
+    //     initialDate: currentDate,
+    //     initialDatePickerMode: DatePickerMode.year,
+    //     firstDate: DateTime(1800),
+    //     lastDate: DateTime(2050));
+
+    // if (pickedDate != null && pickedDate != currentDate)
+    //   setState(() {
+    //     currentDate = pickedDate;
+    //     ayearCon.text = currentDate.toString().substring(0, 10);
+    //   });
   }
 
   QuerySnapshot divData;
@@ -94,6 +132,9 @@ class _StudentState extends State<Student> {
         _isLoading = true;
       });
     selectedSem = Provider.of<StudentProvider>(context, listen: false).sem;
+  division.clear();
+  studentAll.clear();
+  userAll.clear();
     divData = await FirebaseFirestore.instance
         .collection("tbl_division")
         .where("sem", isEqualTo: selectedSem)
@@ -143,7 +184,53 @@ class _StudentState extends State<Student> {
               child: Column(
                 children: [
                   _isLoading
-                      ? CircularProgressIndicator()
+                      ? Shimmer.fromColors(
+                          direction: ShimmerDirection.rtl,
+                          period: Duration(seconds: 3),
+                          baseColor: Colors.blueGrey[50],
+                          highlightColor: Colors.blueGrey[200],
+                          child: SizedBox(
+                          height: 70.0,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: division.length,
+                            itemBuilder: (context, i) => InkWell(
+                              onTap: () {
+                                selectedDiv = division[i];
+                                setState(() {
+                                  _isSelectedDiv = !_isSelectedDiv;
+                                });
+                                print(selectedDiv);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    height: 50.0,
+                                    color: _isSelectedDiv
+                                        ? Colors.blueGrey[300]
+                                        : Colors.blueGrey[700],
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          "Div " + division[i],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        )
                       : SizedBox(
                           height: 70.0,
                           child: ListView.builder(
@@ -185,12 +272,58 @@ class _StudentState extends State<Student> {
                             ),
                           ),
                         ),
+                  // CircularProgressIndicator()
+                  //:
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
+                        ? Shimmer.fromColors(
+                          direction: ShimmerDirection.rtl,
+                          period: Duration(seconds: 3),
+                          baseColor: Colors.blueGrey[50],
+                          highlightColor: Colors.blueGrey[200],
+                          child: SizedBox(
+                          height: 70.0,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: division.length,
+                            itemBuilder: (context, i) => InkWell(
+                              onTap: () {
+                                selectedDiv = division[i];
+                                setState(() {
+                                  _isSelectedDiv = !_isSelectedDiv;
+                                });
+                                print(selectedDiv);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    height: 50.0,
+                                    color: _isSelectedDiv
+                                        ? Colors.blueGrey[300]
+                                        : Colors.blueGrey[700],
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          "Div " + division[i],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                           fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: userAll.length,
@@ -314,9 +447,10 @@ class _StudentState extends State<Student> {
                               Provider.of<StudentProvider>(context,
                                       listen: false)
                                   .deleteStudent(userAll[i].email);
-                              userAll.clear();
-                              studentAll.clear();
+                              
                               setState(() {
+                                userAll.clear();
+                              studentAll.clear();
                                 fetchData();
                               });
                               Navigator.of(context).pop();
@@ -373,17 +507,14 @@ class _StudentState extends State<Student> {
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 TextFormField(
-                 
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
                       borderSide: new BorderSide(),
                     ),
                     hintText: "Enter the First Name",
-                    
                   ),
                   controller: fnameCon,
-                
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -593,7 +724,6 @@ class _StudentState extends State<Student> {
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 TextField(
-                  
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
@@ -601,10 +731,8 @@ class _StudentState extends State<Student> {
                       borderSide: new BorderSide(),
                     ),
                     hintText: "Enter Roll Number",
-                    
                   ),
                   controller: rnoCon,
-                  
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -640,18 +768,25 @@ class _StudentState extends State<Student> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter Academic Year",
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: DropdownButton<String>(
+                    hint: Text("Academic Year"),
+                    value: selectedYear,
+                    items: yearList.map((int value) {
+                      return DropdownMenuItem<String>(
+                        value: value.toString(),
+                        child: Center(child: Text(value.toString())),
+                      );
+                    }).toList(),
+                    onChanged: (String value) {
+                      if (mounted) {
+                        setState(() {
+                          selectedYear = value;
+                        });
+                      }
+                    },
                   ),
-                  onTap: (){
-                    selectYear(context);
-                  },
-                  controller: ayearCon,
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
@@ -674,10 +809,10 @@ class _StudentState extends State<Student> {
                           print(cnoCon.text);
                           print(emailCon.text);
                           print(pwdCon.text);
-                          print(selectedAddDiv);
+                          print(selectedDiv);
                           print(rnoCon.text);
                           print(ernoCon);
-                          print(ayearCon.text);
+                          print(selectedYear);
 
                           userInfoObj.email = emailCon.text;
                           userInfoObj.password = pwdCon.text;
@@ -691,8 +826,8 @@ class _StudentState extends State<Student> {
                           studentObject.rno = int.parse(rnoCon.text);
                           studentObject.enrollno = ernoCon.text;
                           studentObject.sem = selectedSem;
-                          studentObject.div = selectedAddDiv;
-                          studentObject.acadamicYear = ayearCon.text;
+                          studentObject.div = selectedDiv;
+                          studentObject.acadamicYear = selectedYear;
                           studentObject.email = emailCon.text;
 
                           _isEdit
@@ -704,6 +839,7 @@ class _StudentState extends State<Student> {
 
                           setState(() {
                             userAll.clear();
+                            division.clear();
                             studentAll.clear();
                             fetchData();
                           });
