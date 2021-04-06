@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_management_system/providers/semesterProvider.dart';
 import 'package:college_management_system/objects/semesterObject.dart';
-import 'package:college_management_system/providers/studentProvider.dart';
-import 'manageStudent.dart';
 
 class Semester extends StatefulWidget {
   @override
@@ -65,7 +63,7 @@ semester.clear();
                 navigateToPage(context);
               },
             ),
-            title: Text('Students'),
+            title: Text('Semester'),
           ),
           body: SingleChildScrollView(
             child: Container(
@@ -88,36 +86,25 @@ semester.clear();
                               padding: const EdgeInsets.all(10.0),
                               child: ClipRRect(
                                 child: Container(
-                                  child: InkWell(
-                                    onTap: () {
-                                      Provider.of<StudentProvider>(context,listen: false)
-                                          .sem = semester[i].sem;
-
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Student()));
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.01,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                            0.01,
+                                      ),
+                                      Text(
+                                        semester[i].sem,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
                                         ),
-                                        Text(
-                                          semester[i].sem,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                   height:
                                       MediaQuery.of(context).size.height * 0.07,

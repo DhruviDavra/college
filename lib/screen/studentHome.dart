@@ -1,8 +1,11 @@
 import 'package:college_management_system/providers/feedbackProvider.dart';
+import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:college_management_system/screen/contactUs.dart';
 import 'package:college_management_system/screen/homeScreen.dart';
 import 'package:college_management_system/screen/studentFeedback.dart';
+import 'package:college_management_system/screen/studentLeave.dart';
 import 'package:college_management_system/screen/studentNotice.dart';
+import 'package:college_management_system/screen/studentProfile.dart';
 import 'package:college_management_system/screen/studentSeminar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +32,7 @@ class _StudentHomeState extends State<StudentHome> {
   callUserData() async {
     userObj =
         await Provider.of<UserProvider>(context, listen: false).getUserDetail();
-       // print(userObj.email);
+    // print(userObj.email);
     Provider.of<FeedbackProvider>(context, listen: false).studentEmail =
         userObj.email;
     setState(() {
@@ -572,7 +575,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentDetail()));
             },
           ),
           ListTile(
@@ -615,7 +619,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>StudentNotice()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentNotice()));
             },
           ),
           ListTile(
@@ -671,7 +676,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentLeave()));
             },
           ),
           ListTile(

@@ -48,10 +48,7 @@ class NoticeProvider extends ChangeNotifier {
       filePath = filePath.replaceAll(new RegExp(r'(\?alt).*'), '');
       Reference storageReference = FirebaseStorage.instance.ref();
       await storageReference.child(filePath).delete();
-    // final Reference ref =
-    // FirebaseStorage.instance.ref().child(path);
-    // await ref.delete();
- 
+   
     QuerySnapshot noticeQuery = await FirebaseFirestore.instance
         .collection("tbl_notice")
         .where("time", isEqualTo: noticeObject.time)

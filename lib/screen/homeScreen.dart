@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
 import 'package:college_management_system/screen/studentHome.dart';
 import 'package:college_management_system/screen/teachingHome.dart';
@@ -15,14 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
- FocusNode _emailNode = FocusNode();
-  FocusNode _passwordNode = FocusNode();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   String utype;
-  final RegExp emailRegex = new RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 //  fetchutypeFromSP() async {
 //     print('called');
 //     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,29 +62,30 @@ class _HomeScreenState extends State<HomeScreen> {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
-    return SafeArea( 
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.07,
-                ),
-                Image.asset(
-                  "assets/images/logo.png",
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.04,
-                    right: MediaQuery.of(context).size.width * 0.04,
+    return Form(
+      key: _key,
+      //autovalidateMode: _validate,
+      child: SafeArea(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.07,
                   ),
-                  child: Form(
-                    key: _formKey,
+                  Image.asset(
+                    "assets/images/logo.png",
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.04,
+                      right: MediaQuery.of(context).size.width * 0.04,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -116,9 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         TextFormField(
-                          
                           keyboardType: TextInputType.emailAddress,
-                          focusNode: _emailNode,
                           decoration: InputDecoration(
                             border: new OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(25.0),
@@ -127,19 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             hintText: "Enter Email Address",
                           ),
                           controller: emailCon,
-                          validator: (value) {
-                            if (!emailRegex.hasMatch(value)) {
-                              // return 'Please enter valid email';
-                              throw "Please enter valid email";
-                            }
-                            return null;
-                          },
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return 'Please enter some text';
-                          //   }
-                          //   return null;
-                          // },
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.02,
@@ -217,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               try {
                                 // print(emailCon.text);
                                 // print(pwdCon.text);
-
+                                print(emailCon.text.length);
                                 dynamic result =
                                     await Provider.of<UserProvider>(context,
                                             listen: false)
@@ -254,6 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 NonTeachingHome()));
                                   }
                                   if (utype == "Student") {
+                                    Provider.of<StudentProvider>(context,listen: false)
+                                        .profileEmail = emailCon.text;
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -298,8 +282,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

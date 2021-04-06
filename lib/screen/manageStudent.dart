@@ -3,6 +3,7 @@ import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/userProvider.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:college_management_system/objects/studentObject.dart';
+import 'package:college_management_system/screen/studentProfile.dart';
 import 'package:flutter/material.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
@@ -110,18 +111,7 @@ class _StudentState extends State<Student> {
         },
       ),
     );
-    // final DateTime pickedDate = await showDatePicker(
-    //     context: context,
-    //     initialDate: currentDate,
-    //     initialDatePickerMode: DatePickerMode.year,
-    //     firstDate: DateTime(1800),
-    //     lastDate: DateTime(2050));
-
-    // if (pickedDate != null && pickedDate != currentDate)
-    //   setState(() {
-    //     currentDate = pickedDate;
-    //     ayearCon.text = currentDate.toString().substring(0, 10);
-    //   });
+    
   }
 
   QuerySnapshot divData;
@@ -272,8 +262,7 @@ class _StudentState extends State<Student> {
                             ),
                           ),
                         ),
-                  // CircularProgressIndicator()
-                  //:
+                  
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: _isLoading
@@ -282,47 +271,55 @@ class _StudentState extends State<Student> {
                           period: Duration(seconds: 3),
                           baseColor: Colors.blueGrey[50],
                           highlightColor: Colors.blueGrey[200],
-                          child: SizedBox(
-                          height: 70.0,
                           child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: division.length,
-                            itemBuilder: (context, i) => InkWell(
-                              onTap: () {
-                                selectedDiv = division[i];
-                                setState(() {
-                                  _isSelectedDiv = !_isSelectedDiv;
-                                });
-                                print(selectedDiv);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    height: 50.0,
-                                    color: _isSelectedDiv
-                                        ? Colors.blueGrey[300]
-                                        : Colors.blueGrey[700],
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          "Div " + division[i],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                           fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                            scrollDirection: Axis.vertical,
+                            itemCount: userAll.length,
+                            itemBuilder: (context, i) => Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  print(userAll[i].email);
+                                  Provider.of<StudentProvider>(context,
+                                          listen: false)
+                                      .profileEmail = userAll[i].email;
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => StudentDetail()));
+                                },
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.01,
                                       ),
-                                    ),
+                                      Text(userAll[i].fname +
+                                          " " +
+                                          userAll[i].mname +
+                                          " " +
+                                          userAll[i].lname),
+                                      Spacer(),
+                                      editDeleteButton(i),
+                                    ],
+                                  ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(0.0, 1.0), //(x,y)
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
                         )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
@@ -332,11 +329,11 @@ class _StudentState extends State<Student> {
                               child: InkWell(
                                 onTap: () {
                                   print(userAll[i].email);
-                                  // Provider.of<TeachingStaffProvider>(context,
-                                  //         listen: false)
-                                  //     .profileEmail = userAll[i].email;
-                                  // Navigator.of(context).push(MaterialPageRoute(
-                                  //     builder: (context) => StaffProfile()));
+                                  Provider.of<StudentProvider>(context,
+                                          listen: false)
+                                      .profileEmail = userAll[i].email;
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => StudentDetail()));
                                 },
                                 child: Container(
                                   child: Row(

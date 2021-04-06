@@ -1,16 +1,16 @@
-import 'package:college_management_system/objects/teachingStaffObject.dart';
+import 'package:college_management_system/objects/studentObject.dart';
 import 'package:college_management_system/objects/usersObject.dart';
-import './homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:college_management_system/providers/teachingStaffProvider.dart';
+import 'homeScreen.dart';
+import 'package:college_management_system/providers/studentProvider.dart';
 
-class StaffProfile extends StatefulWidget {
+class StudentDetail extends StatefulWidget {
   @override
-  _StaffProfileState createState() => _StaffProfileState();
+  _StudentDetailState createState() => _StudentDetailState();
 }
 
-class _StaffProfileState extends State<StaffProfile> {
+class _StudentDetailState extends State<StudentDetail> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -31,27 +31,20 @@ class _StaffProfileState extends State<StaffProfile> {
         _isLoading = true;
       });
 
-    email =
-        Provider.of<TeachingStaffProvider>(context, listen: false).profileEmail;
-       // print(email);
-    teachingStaffObject =
-        await Provider.of<TeachingStaffProvider>(context, listen: false)
-            .getParticularStaff(email);
-    userInfoObj =
-        await Provider.of<TeachingStaffProvider>(context, listen: false)
-            .getParticularUser(email);
-     print(teachingStaffObject.qualification);
-    // print(teachingStaffObject.designation);
-    // print(teachingStaffObject.experience);
-    // print(teachingStaffObject.specialinterest);
-   // print(teachingStaffObject.qualification);
+    email = Provider.of<StudentProvider>(context, listen: false).profileEmail;
+    // print(email);
+    studentObject = await Provider.of<StudentProvider>(context, listen: false)
+        .getParticularStudent(email);
+    userInfoObj = await Provider.of<StudentProvider>(context, listen: false)
+        .getParticularUser(email);
+  
     if (mounted)
       setState(() {
         _isLoading = false;
       });
   }
 
-  TeachingStaffObject teachingStaffObject = TeachingStaffObject();
+  StudentObject studentObject = StudentObject();
   UserInfoObj userInfoObj = UserInfoObj();
 
   @override
@@ -62,6 +55,7 @@ class _StaffProfileState extends State<StaffProfile> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
+          backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
@@ -75,9 +69,7 @@ class _StaffProfileState extends State<StaffProfile> {
             child: Container(
               margin: EdgeInsets.all(15),
               child: _isLoading
-                  ? Center(
-                    child: CircularProgressIndicator(),
-                  )
+                  ? Center(child: CircularProgressIndicator(),)
                   : Column(
                       children: [
                         SizedBox(
@@ -85,7 +77,7 @@ class _StaffProfileState extends State<StaffProfile> {
                         ),
                         Icon(
                           Icons.account_circle_sharp,
-                          color: Colors.blueGrey,
+                          color: Colors.blueGrey[700],
                           size: 100,
                         ),
                         SizedBox(
@@ -97,6 +89,7 @@ class _StaffProfileState extends State<StaffProfile> {
                               userInfoObj.mname +
                               " " +
                               userInfoObj.lname,
+                          //                  name,
                           style: TextStyle(fontSize: 22),
                         ),
                         SizedBox(
@@ -105,38 +98,13 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
                               child: Text(
-                                "  Qualification:",
+                                "  Roll No:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
-                                child: Text(
-                                    teachingStaffObject.qualification.toString()),
-                              ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                      flex:1,
-
-                              child: Text(
-                                "  Designation:",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                            Expanded(
-                                      flex:1,
-
-                              child: Text(teachingStaffObject.designation),
+                              child: Text(studentObject.rno.toString()),
                             ),
                           ],
                         ),
@@ -146,19 +114,13 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
                               child: Text(
-                                "  Date of Birth:",
+                                "  Enrollment No:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
-                              child: Text(
-                                userInfoObj.dob,
-                              ),
+                              child: Text(studentObject.enrollno),
                             ),
                           ],
                         ),
@@ -168,36 +130,12 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
-                              child: Text(
-                                "  Contact No:",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                            Expanded(
-                                      flex:1,
-
-                              child: Text(userInfoObj.cno),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                      flex:1,
-
                               child: Text(
                                 "  Email:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
                               child: Text(userInfoObj.email),
                             ),
                           ],
@@ -208,17 +146,16 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
                               child: Text(
-                                "  Experience:",
+                                "  Division:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
-                              child: Text(teachingStaffObject.experience),
+                              child: Text(
+                                studentObject.div,
+                                //       email,
+                              ),
                             ),
                           ],
                         ),
@@ -228,17 +165,45 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
                               child: Text(
-                                "  Special Interest:",
+                                "  Semester:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
-                              child: Text(teachingStaffObject.specialinterest),
+                              child: Text(studentObject.sem),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "  Academic Year:",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(studentObject.acadamicYear),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "  Contact No:",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(userInfoObj.cno),
                             ),
                           ],
                         ),

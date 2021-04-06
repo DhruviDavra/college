@@ -14,7 +14,7 @@ class UserProvider extends ChangeNotifier {
   }
 
 //bool get isUserLoggedin=>get
-  String eMsg = " ";
+  String eMsg = "";
   String userId;
   String utype = " ";
   // fetchutypeFromSP() async {
@@ -54,22 +54,16 @@ class UserProvider extends ChangeNotifier {
 
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        eMsg = 'No user found for that email.';
-        print(eMsg);
-      } else if (e.code == 'wrong-password') {
-        eMsg = 'Wrong password provided for that user.';
-        print(eMsg);
-      }
-      if(eMsg.isEmpty){
-        eMsg="Something Went Wrong!!!";
-      }
-      throw eMsg;
-    } catch (e) {
+      print(e.message);
       
-      print(e.toString());
+      throw e.message;
+    } catch (e) {
+     // print(e.code);
+      if(e.code=='unknown'){
+          eMsg="Something Went Wrong!!!";
+      }
       // return null;
-      throw e;
+      throw e.message;
     }
   }
 
@@ -89,10 +83,10 @@ class UserProvider extends ChangeNotifier {
         eMsg = 'The account already exists for that email.';
         print(eMsg);
       }
-      throw eMsg;
+      throw e.message;
     } catch (e) {
       print(e.toString());
-      throw e;
+      throw e.message;
     }
   }
 

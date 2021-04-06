@@ -10,27 +10,47 @@ class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
- String utype = "";
 
- fetchutypeFromSP() async {
-    print('called');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    utype = prefs.getString('utype') ?? "";
-    
-   // await checkPlatform();
+String utype = "";
+
+// checkConnection(BuildContext context) async {
+//   var connectivityResult = await (Connectivity().checkConnectivity());
+//   if (connectivityResult == ConnectivityResult.none) {
+//     isInternetOn = false;
+//     _showDialog(context);
+//   } else if (connectivityResult == ConnectivityResult.mobile ||
+//       connectivityResult == ConnectivityResult.wifi) {
+//     isInternetOn = true;
+//     fetchutypeFromSP();
+//     Timer(
+//       Duration(seconds: 3),
+//       () => Navigator.of(context).pushReplacement(
+//         MaterialPageRoute(builder: (BuildContext context) => checkPlatform()),
+//       ),
+//     );
+//   }
+// }
+
+fetchutypeFromSP() async {
+  print('called');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  utype = prefs.getString('utype') ?? "";
+
+  // await checkPlatform();
+}
+
+ checkPlatform() {
+  if (utype == "Admin") {
+    return AdminHome();
+  } else if (utype == "TeachingStaff") {
+    return TeachingHome();
+  } else if (utype == "Student") {
+    return StudentHome();
+  } else {
+    return HomeScreen();
   }
-  checkPlatform() {
-   
-    if (utype == "Admin") {
-     return AdminHome();
-    } else if (utype == "TeachingStaff") {
-      return TeachingHome();
-    } else if (utype == "Student") {
-     return StudentHome();
-    } else {
-     return HomeScreen();
-    }
-  }
+}
+
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -46,6 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       backgroundColor: Color.fromRGBO(236, 239, 241, 1.0),
       body: Center(
@@ -71,4 +92,6 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+
+ 
 }

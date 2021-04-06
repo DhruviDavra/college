@@ -48,7 +48,8 @@ dependencies:
   path_provider: ^1.6.8
   flutter_full_pdf_viewer: ^1.0.6
   shimmer: ^0.0.4
-  connectivity: 
+  data_connection_checker: ^0.1.0
+  connectivity: ^0.4.8+2 
   
 
 dev_dependencies:

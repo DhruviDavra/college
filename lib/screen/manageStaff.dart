@@ -7,7 +7,6 @@ import 'package:college_management_system/providers/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
-
 import 'staffProfile.dart';
 
 class Staff extends StatefulWidget {
@@ -113,117 +112,122 @@ class _StaffState extends State<Staff> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.blueGrey[700],
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                navigateToPage(context);
-              },
+    return Form(
+      child: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.blueGrey[700],
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  navigateToPage(context);
+                },
+              ),
+              title: Text("Teaching Staff"),
             ),
-            title: Text("Teaching Staff"),
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: userAll.length,
-                            itemBuilder: (context, i) => Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: InkWell(
-                                onTap: () {
-                                  print(userAll[i].email);
-                                  Provider.of<TeachingStaffProvider>(context,
-                                          listen: false)
-                                      .profileEmail = userAll[i].email;
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => StaffProfile()));
-                                },
-                                child: Container(
-                                 
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            userAll[i].fname +
-                                                " " +
-                                                userAll[i].mname +
-                                                " " +
-                                                userAll[i].lname+"\n" ,
-                                            style: TextStyle(
-                                              fontSize: 16,
+            body: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      child: _isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: userAll.length,
+                              itemBuilder: (context, i) => Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    print(userAll[i].email);
+                                    Provider.of<TeachingStaffProvider>(context,
+                                            listen: false)
+                                        .profileEmail = userAll[i].email;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                StaffProfile()));
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.01,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              userAll[i].fname +
+                                                  " " +
+                                                  userAll[i].mname +
+                                                  " " +
+                                                  userAll[i].lname +
+                                                  "\n",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                          Text( teachingAll[i].designation),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      editDeleteButton(i),
-                                    ],
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.08,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.01,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(0.0, 1.0), //(x,y)
-                                        blurRadius: 6.0,
-                                      ),
-                                    ],
+                                            Text(teachingAll[i].designation),
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        editDeleteButton(i),
+                                      ],
+                                    ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.08,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.01,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0.0, 1.0), //(x,y)
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            backgroundColor: Colors.blueGrey,
-            onPressed: () {
-              this.fnameCon.clear();
-              this.mnameCon.clear();
-              this.lnameCon.clear();
-              this.dateCon.clear();
-              this.cnoCon.clear();
-              this.emailCon.clear();
-              this.pwdCon.clear();
-              this.specialIntCon.clear();
-              this.experienceCon.clear();
-              this.selectedQua.clear();
-              _isEdit = false;
-              addStaff(context);
-            },
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: Colors.blueGrey,
+              onPressed: () {
+                this.fnameCon.clear();
+                this.mnameCon.clear();
+                this.lnameCon.clear();
+                this.dateCon.clear();
+                this.cnoCon.clear();
+                this.emailCon.clear();
+                this.pwdCon.clear();
+                this.specialIntCon.clear();
+                this.experienceCon.clear();
+                this.selectedQua.clear();
+                _isEdit = false;
+                addStaff(context);
+              },
+            ),
           ),
         ),
       ),
@@ -332,7 +336,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -341,6 +345,12 @@ class _StaffState extends State<Staff> {
                     hintText: "Enter the First Name",
                   ),
                   controller: fnameCon,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -354,7 +364,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -376,7 +386,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -398,7 +408,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -423,7 +433,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
@@ -446,7 +456,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   enabled: _isEdit ? false : true,
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
@@ -469,7 +479,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   enabled: _isEdit ? false : true,
                   obscureText: true,
                   decoration: InputDecoration(
@@ -545,7 +555,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
@@ -600,7 +610,7 @@ class _StaffState extends State<Staff> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -621,7 +631,7 @@ class _StaffState extends State<Staff> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      color: Colors.blue,
+                      color: Colors.blueGrey,
                       onPressed: () async {
                         try {
                           print(fnameCon.text);
@@ -652,13 +662,13 @@ class _StaffState extends State<Staff> {
                               specialIntCon.text;
                           teachingStaffObject.experience = experienceCon.text;
                           print(teachingStaffObject.qualification);
-                          _isEdit
-                              ? await Provider.of<TeachingStaffProvider>(
-                                      context,
-                                      listen: false)
-                                  .update(emailCon.text, userInfoObj,
-                                      teachingStaffObject)
-                              : await insert();
+                          // _isEdit
+                          //     ? await Provider.of<TeachingStaffProvider>(
+                          //             context,
+                          //             listen: false)
+                          //         .update(emailCon.text, userInfoObj,
+                          //             teachingStaffObject)
+                          //     : await insert();
 
                           setState(() {
                             userAll.clear();

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:college_management_system/objects/teachingStaffObject.dart';
 import 'package:college_management_system/objects/studentObject.dart';
 
 class StudentProvider extends ChangeNotifier {
@@ -145,7 +144,7 @@ class StudentProvider extends ChangeNotifier {
         .collection("tbl_student")
         .where("email", isEqualTo: email)
         .get();
-    return teachingStaffObjectFromJson(
+    return studentObjectFromJson(
         json.encode(querySnapshot.docs.first.data()));
   }
 
