@@ -10,6 +10,7 @@ class FeedbackProvider extends ChangeNotifier {
   }
 
   List<FeedbackObject> feedbackDetails = [];
+  List<FeedbackObject> allFeedbacks=[];
   List<FeedbackObject> feedbackStudentWise = [];
   String studentEmail;
   String email;
@@ -35,16 +36,28 @@ class FeedbackProvider extends ChangeNotifier {
   }
 
   Future<List<FeedbackObject>> findFeedback(String date) async {
-    QuerySnapshot seminarData = await FirebaseFirestore.instance
+    QuerySnapshot feedbackData = await FirebaseFirestore.instance
         .collection("tbl_feedback")
         .where("date", isEqualTo: date)
         .get();
-    for (int i = 0; i < seminarData.docs.length; i++) {
+    for (int i = 0; i < feedbackData.docs.length; i++) {
       // print(seminarData.docs[i].data()["email"]);
       feedbackDetails
-          .add(feedbackObjectFromJson(json.encode(seminarData.docs[i].data())));
+          .add(feedbackObjectFromJson(json.encode(feedbackData.docs[i].data())));
     } //for
     return feedbackDetails;
+  }
+
+   Future<List<FeedbackObject>> allFeedback() async {
+    QuerySnapshot feedbackData = await FirebaseFirestore.instance
+        .collection("tbl_feedback")
+        .orderBy("time")
+        .get();
+    for (int i = 0; i < feedbackData.docs.length; i++) {
+       allFeedbacks
+          .add(feedbackObjectFromJson(json.encode(feedbackData.docs[i].data())));
+    } //for
+    return allFeedbacks;
   }
 
   getParticularfeedbackStudentWise(String time) async {

@@ -1,5 +1,6 @@
 import 'package:college_management_system/objects/seminarObject.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/seminarProvider.dart';
@@ -111,11 +112,16 @@ class _StudentSeminarState extends State<StudentSeminar> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.blueGrey,
-                            ),
-                          )
+                        ? Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height*0.4,
+                      ),
+                      SpinKitChasingDots(
+                        color:Colors.blueGrey,
+                      ),
+                    ],
+                  )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: seminarAll.length,

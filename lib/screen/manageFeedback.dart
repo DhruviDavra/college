@@ -1,6 +1,6 @@
-
 import 'package:college_management_system/objects/feedbackObject.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
@@ -20,24 +20,30 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
+  bool _isShowAll = false;
   bool showfab = true;
   String msg = 'No Feedback !!!';
   bool _isEmpty = false;
   //List<FeedbackObject> tasks = [];
 
   List<FeedbackObject> data = [];
+  List<FeedbackObject> allFeedback = [];
   Future<void> getData() async {
     data.clear();
+    allFeedback.clear();
     data = await Provider.of<FeedbackProvider>(context, listen: false)
         .findFeedback(temp);
 
-   setState(() {
+    allFeedback = await Provider.of<FeedbackProvider>(context, listen: false)
+        .allFeedback();
+
+    setState(() {
       if (data.length == 0) {
-      _isEmpty = true;
-    } else {
-      _isEmpty = false;
-    }
-   });
+        _isEmpty = true;
+      } else {
+        _isEmpty = false;
+      }
+    });
   }
 
   String temp = "No date selected!!";
@@ -46,6 +52,8 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
   @override
   void initState() {
     super.initState();
+    data.clear();
+    allFeedback.clear();
     getData();
   }
 
@@ -67,100 +75,213 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
               },
             ),
             title: Text("Feedback"),
+            actions: [
+              RaisedButton(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: Colors.blueGrey[700],
+                onPressed: () {
+                  setState(() {
+                    _isShowAll = !_isShowAll;
+                  });
+                },
+                child: Text(
+                  "Show All",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ),
+            ],
           ),
           body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  TableCalendar(
-                    calendarController: calcon,
-                    initialSelectedDay: DateTime.now(),
-                    initialCalendarFormat: CalendarFormat.week,
-                    onDaySelected: (date, event, holiday) async {
-                      daySelected = date;
-                      setState(() {
-                        daySelected = date;
-                        temp = daySelected.toString().substring(0, 10);
-                      });
-                      
-                      setState(() {});
-                     await getData();
-                    },
-                  ),
-                  _isEmpty
-                      ? Column(
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                            ),
-                            Text(
-                              msg,
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
+            child: _isShowAll
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.80,
+                    child: _isLoading
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
                               ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.80,
-                          child: _isLoading
-                              ? CircularProgressIndicator()
-                              : ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: data.length,
-                                  itemBuilder: (context, i) => Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Container(
-                                      child: InkWell(
-                                        onTap: () {
-                                          Provider.of<FeedbackProvider>(context,
-                                                  listen: false)
-                                              .email = data[i].email;
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      FeedbackDetail()));
-                                        },
-                                        child: Row(
+                              SpinKitChasingDots(
+                                color: Colors.blueGrey,
+                              ),
+                            ],
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: allFeedback.length,
+                            itemBuilder: (context, i) => Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    Provider.of<FeedbackProvider>(context,
+                                            listen: false)
+                                        .email = allFeedback[i].email;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FeedbackDetail()));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                data[i].email,
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                ),
+                                            Text(
+                                             "Date: "+ allFeedback[i].date,
+                                              style: TextStyle(
+                                                fontSize: 18,
                                               ),
                                             ),
-                                            Spacer(),
+                                             Text(
+                                              "\n"+allFeedback[i].email,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.07,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.01,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.blueGrey[800],
-                                            offset: Offset(0.0, 1.0), //(x,y)
-                                            blurRadius: 6.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                      Spacer(),
+                                    ],
                                   ),
                                 ),
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                width: MediaQuery.of(context).size.width * 0.01,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blueGrey[800],
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                  )
+                : Container(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        TableCalendar(
+                          calendarController: calcon,
+                          initialSelectedDay: DateTime.now(),
+                          initialCalendarFormat: CalendarFormat.week,
+                          onDaySelected: (date, event, holiday) async {
+                            daySelected = date;
+                            setState(() {
+                              daySelected = date;
+                              temp = daySelected.toString().substring(0, 10);
+                            });
+
+                            setState(() {});
+                            await getData();
+                          },
                         ),
-                ],
-              ),
-            ),
+                        _isEmpty
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.06,
+                                  ),
+                                  Text(
+                                    msg,
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.80,
+                                child: _isLoading
+                                    ? Column(
+                                        children: [
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.4,
+                                          ),
+                                          SpinKitChasingDots(
+                                            color: Colors.blueGrey,
+                                          ),
+                                        ],
+                                      )
+                                    : ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: data.length,
+                                        itemBuilder: (context, i) => Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Container(
+                                            child: InkWell(
+                                              onTap: () {
+                                                Provider.of<FeedbackProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .email = data[i].email;
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            FeedbackDetail()));
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      data[i].email,
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                ],
+                                              ),
+                                            ),
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.01,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.blueGrey[800],
+                                                  offset:
+                                                      Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 6.0,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                      ],
+                    ),
+                  ),
           ),
         ),
       ),

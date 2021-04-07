@@ -1,7 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
 import 'package:college_management_system/providers/seminarProvider.dart';
+import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +32,7 @@ class _AdminHomeState extends State<AdminHome> {
   String totalSeminar = " ";
   String totalFeedback = " ";
   String totalNotice = " ";
+  String totalStudent = " ";
   bool isLoading = false;
   UserInfoObj userObj = UserInfoObj();
 
@@ -51,6 +54,9 @@ class _AdminHomeState extends State<AdminHome> {
 
     totalFeedback = await Provider.of<FeedbackProvider>(context, listen: false)
         .countFeedback();
+
+    totalStudent = await Provider.of<StudentProvider>(context, listen: false)
+        .countStudent();
 
     totalNotice =
         await Provider.of<NoticeProvider>(context, listen: false).countNotice();
@@ -74,523 +80,690 @@ class _AdminHomeState extends State<AdminHome> {
             title: Text('TMTBCA'),
           ),
           drawer: drawer(),
-          body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.only(
-                right: MediaQuery.of(context).size.width * 0.06,
-                left: MediaQuery.of(context).size.width * 0.06,
-                top: MediaQuery.of(context).size.height * 0.04,
-              ),
-              child: Column(
+          body: Stack(
+            children: [
+              ListView(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                  CarouselSlider(
+                    autoPlay: true,
+                    items: [
                       Container(
-                        padding: EdgeInsets.all(4),
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
+                        margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/student.png',
-                                    height: MediaQuery.of(context).size.height *
-                                        0.07,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      FittedBox(
-                                        child: Text(
-                                          "  Student",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("79%"),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/slider1.JPG"),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(4),
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
+                        margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Staff()));
-                          },
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/teaching.png',
-                                    height: MediaQuery.of(context).size.height *
-                                        0.08,
-                                    // width: MediaQuery.of(context).size.height * 0.06,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      FittedBox(
-                                        child: Text(
-                                          "  Staff",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(totalStaff),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => FeedbackAdmin()));
-                          },
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/feedback.JPG',
-                                    height: MediaQuery.of(context).size.height *
-                                        0.06,
-                                    // width: MediaQuery.of(context).size.height * 0.06,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      FittedBox(
-                                        child: Text(
-                                          "Feedback",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(totalFeedback),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/slider2.JPG"),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
+                        margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Seminar()));
-                          },
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/teaching.JPG',
-                                    height: MediaQuery.of(context).size.height *
-                                        0.06,
-                                    // width: MediaQuery.of(context).size.height * 0.06,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      FittedBox(
-                                        child: Text(
-                                          "Seminar",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(totalSeminar),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/slider3.JPG"),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
+                        margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/leaves.JPG',
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  // width: MediaQuery.of(context).size.height * 0.06,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    FittedBox(
-                                      child: Text(
-                                        "  Leaves",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text("5"),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AdminNotice()));
-                          },
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/notice.JPG',
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
-                                    // width: MediaQuery.of(context).size.height * 0.06,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      AutoSizeText(
-                                        "Announcements",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.01,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(totalNotice),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/slider4.JPG"),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.16,
-                        width: MediaQuery.of(context).size.height * 0.22,
+                        margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 6.0,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/report.JPG',
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.08,
-                                  // width: MediaQuery.of(context).size.height * 0.06,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    FittedBox(
-                                      child: Text(
-                                        "Reports",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                Row(
-                                  children: [
-                                    Text("5"),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.03,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.16,
-                            width: MediaQuery.of(context).size.height * 0.22,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(0.0, 1.0), //(x,y)
-                                  blurRadius: 6.0,
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/sem.JPG',
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.07,
-                                      // width: MediaQuery.of(context).size.height * 0.06,
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        FittedBox(
-                                          child: Text(
-                                            " Semester",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text("5"),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/slider5.JPG"),
+                            fit: BoxFit.cover,
                           ),
-                        ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(6.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/slider6.JPG"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
+              SingleChildScrollView(
+                child: Column(children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.92,
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[100],
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(60.0),
+                      ),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        right: MediaQuery.of(context).size.width * 0.06,
+                        left: MediaQuery.of(context).size.width * 0.06,
+                        top: MediaQuery.of(context).size.height * 0.04,
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => StudentAdminHome()));
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(4),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.16,
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.22,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(0.0, 1.0), //(x,y)
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/student.png',
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.07,
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                FittedBox(
+                                                  child: Text(
+                                                    "  Student",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.01,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(totalStudent),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Staff()));
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(4),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.16,
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.22,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(0.0, 1.0), //(x,y)
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/teaching.png',
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.08,
+                                            // width: MediaQuery.of(context).size.height * 0.06,
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              FittedBox(
+                                                child: Text(
+                                                  "  Staff",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.01,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(totalStaff),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FeedbackAdmin()));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/feedback.JPG',
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.06,
+                                            // width: MediaQuery.of(context).size.height * 0.06,
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              FittedBox(
+                                                child: Text(
+                                                  "Feedback",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.01,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(totalFeedback),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => Seminar()));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/teaching.JPG',
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.06,
+                                            // width: MediaQuery.of(context).size.height * 0.06,
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              FittedBox(
+                                                child: Text(
+                                                  "Seminar",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.01,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(totalSeminar),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/leaves.JPG',
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.06,
+                                          // width: MediaQuery.of(context).size.height * 0.06,
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            FittedBox(
+                                              child: Text(
+                                                "  Leaves",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text("5"),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdminNotice()));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/notice.JPG',
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.05,
+                                            // width: MediaQuery.of(context).size.height * 0.06,
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              AutoSizeText(
+                                                "Announcements",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.01,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(totalNotice),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/report.JPG',
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.08,
+                                          // width: MediaQuery.of(context).size.height * 0.06,
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            FittedBox(
+                                              child: Text(
+                                                "Reports",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text("5"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.16,
+                                    width: MediaQuery.of(context).size.height *
+                                        0.22,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0.0, 1.0), //(x,y)
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/sem.JPG',
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.07,
+                                              // width: MediaQuery.of(context).size.height * 0.06,
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                FittedBox(
+                                                  child: Text(
+                                                    " Semester",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.01,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text("5"),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ],
           ),
         ),
       ),
@@ -627,7 +800,6 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
           ),
-          
           ListTile(
             leading: Icon(
               Icons.account_circle,
@@ -644,7 +816,6 @@ class _AdminHomeState extends State<AdminHome> {
               ));
             },
           ),
-          
           ListTile(
             leading: Icon(
               Icons.people,
@@ -661,7 +832,6 @@ class _AdminHomeState extends State<AdminHome> {
               ));
             },
           ),
-          
           ListTile(
             leading: Icon(
               Icons.people,

@@ -1,6 +1,7 @@
 import 'package:college_management_system/objects/noticeObject.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'homeScreen.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _NoticeDetailState extends State<NoticeDetail> {
 
     noticeObject =
         Provider.of<NoticeProvider>(context, listen: false).particularNotice;
-   await _loadFromUrl(noticeObject.spath);
+    await _loadFromUrl(noticeObject.spath);
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -67,14 +68,19 @@ class _NoticeDetailState extends State<NoticeDetail> {
             ),
           ),
           body: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.blueGrey,
-                  ),
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                    SpinKitChasingDots(
+                      color: Colors.blueGrey,
+                    ),
+                  ],
                 )
               : PDFViewer(
-                document: doc,
-              ),
+                  document: doc,
+                ),
         ),
       ),
     );

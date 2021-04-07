@@ -7,53 +7,20 @@ import 'package:college_management_system/screen/studentLeave.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LeaveForm extends StatefulWidget {
+class LeaveDetail extends StatefulWidget {
   @override
-  _LeaveFormState createState() => _LeaveFormState();
+  _LeaveDetailState createState() => _LeaveDetailState();
 }
 
-class _LeaveFormState extends State<LeaveForm> {
+class _LeaveDetailState extends State<LeaveDetail> {
   void navigateToPage(BuildContext context) async {
-    titleCon.clear();
-    desCon.clear();
-    toDateCon.clear();
-    fromDateCon.clear();
+   
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => StudentLeave()));
   }
 
   LeaveObject leaveObject = LeaveObject();
-  TextEditingController toDateCon = TextEditingController();
-  TextEditingController fromDateCon = TextEditingController();
-  TextEditingController titleCon = TextEditingController();
-  TextEditingController desCon = TextEditingController();
-  DateTime currentDate = DateTime.now();
-  Future<void> selectToDate(BuildContext context) async {
-    final DateTime pickedDate = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(1800),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
-      setState(() {
-        currentDate = pickedDate;
-        toDateCon.text = currentDate.toString().substring(0, 10);
-      });
-  }
-
-  Future<void> selectFromDate(BuildContext context) async {
-    final DateTime pickedDate = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(1800),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
-      setState(() {
-        currentDate = pickedDate;
-        fromDateCon.text = currentDate.toString().substring(0, 10);
-      });
-  }
-
+  
   String email;
   bool _isLoading;
 
@@ -69,7 +36,8 @@ class _LeaveFormState extends State<LeaveForm> {
         .getParticularStudent(email);
     userInfoObj = await Provider.of<StudentProvider>(context, listen: false)
         .getParticularUser(email);
-
+    leaveObject = await Provider.of<LeaveProvider>(context, listen: false)
+        .getParticularLeave();
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -94,7 +62,7 @@ class _LeaveFormState extends State<LeaveForm> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Leave Form"),
+          title: Text("Leave Detail"),
           backgroundColor: Colors.blueGrey[700],
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -242,26 +210,36 @@ class _LeaveFormState extends State<LeaveForm> {
                             Row(
                               children: [
                                 Text(
+                                  "Apply Date: ",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  Provider.of<LeaveProvider>(context,
+                                          listen: false)
+                                      .epochToLocal(leaveObject.applytime),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                            ),
+                            Row(
+                              children: [
+                                Text(
                                   "Title: ",
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.6,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.05,
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      border: new OutlineInputBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(25.0),
-                                        borderSide: new BorderSide(),
-                                      ),
-                                      hintText: "Enter Title",
-                                    ),
-                                    controller: titleCon,
+                                Text(
+                                  leaveObject.title,
+                                  style: TextStyle(
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
@@ -277,111 +255,70 @@ class _LeaveFormState extends State<LeaveForm> {
                             SizedBox(
                               height: MediaQuery.of(context).size.width * 0.02,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: TextField(
-                                maxLines: maxLines,
-                                decoration: InputDecoration(
-                                  border: new OutlineInputBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(),
-                                  ),
-                                  hintText:
-                                      "Respected Sir/Ma'am\n      Give your Reason Here...\n\nThank You",
-                                ),
-                                controller: desCon,
+                            Text(
+                              leaveObject.des,
+                              style: TextStyle(
+                                fontSize: 16,
                               ),
                             ),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.02,
                             ),
-                            Text(
-                              "  To Date",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                selectToDate(context);
-                              },
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: "Select date",
-                                  border: new OutlineInputBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(),
+                            Row(
+                              children: [
+                                Text(
+                                  "To Date: ",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  leaveObject.toDate,
+                                  style: TextStyle(
+                                    fontSize: 16,
                                   ),
                                 ),
-                                controller: toDateCon,
-                                enabled: false,
-                              ),
+                              ],
                             ),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.02,
                             ),
-                            Text(
-                              "  From Date",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                selectFromDate(context);
-                              },
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: "Select date",
-                                  border: new OutlineInputBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(),
+                            Row(
+                              children: [
+                                Text(
+                                  "From Date: ",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  leaveObject.fromDate,
+                                  style: TextStyle(
+                                    fontSize: 16,
                                   ),
                                 ),
-                                controller: fromDateCon,
-                                enabled: false,
-                              ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Status: ",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  leaveObject.status,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          color: Colors.blueGrey[700],
-                          onPressed: () {
-                            leaveObject.title = titleCon.text;
-                            leaveObject.des = desCon.text;
-                            leaveObject.toDate = toDateCon.text;
-                            leaveObject.fromDate = fromDateCon.text;
-                            leaveObject.email = studentObject.email;
-                            leaveObject.status = "Pending";
-                            leaveObject.applytime =
-                                DateTime.now().toUtc().millisecondsSinceEpoch;
-
-                            print(leaveObject.title);
-                            print(leaveObject.des);
-                            print(leaveObject.toDate);
-                            print(leaveObject.fromDate);
-                            print(leaveObject.email);
-                            print(leaveObject.status);
-                            print(leaveObject.applytime);
-
-                            Provider.of<LeaveProvider>(context, listen: false)
-                                .addLeave(leaveObject);
-
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => StudentLeave()));
-                          },
-                          child: Text(
-                            "Apply",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
                         ),
                       ),
                     ],

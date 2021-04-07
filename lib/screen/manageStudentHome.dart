@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +38,7 @@ class _StudentAdminHomeState extends State<StudentAdminHome> {
       setState(() {
         _isLoading = true;
       });
-semester.clear();
+    semester.clear();
     semester = await Provider.of<SemesterProvider>(context, listen: false)
         .getSemesterDetail();
     if (mounted)
@@ -76,12 +77,19 @@ semester.clear();
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.blueGrey,
-                            ),
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                              ),
+                              SpinKitChasingDots(
+                                color: Colors.blueGrey,
+                              ),
+                            ],
                           )
-                        : ListView.builder(
+                        : 
+                        ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: semester.length,
                             itemBuilder: (context, i) => Padding(
@@ -90,13 +98,13 @@ semester.clear();
                                 child: Container(
                                   child: InkWell(
                                     onTap: () {
-                                      Provider.of<StudentProvider>(context,listen: false)
+                                      Provider.of<StudentProvider>(context,
+                                              listen: false)
                                           .sem = semester[i].sem;
 
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Student()));
+                                              builder: (context) => Student()));
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -126,7 +134,6 @@ semester.clear();
                                   decoration: BoxDecoration(
                                     color: Colors.blueGrey[400],
                                     borderRadius: BorderRadius.circular(15),
-                                   
                                   ),
                                 ),
                               ),

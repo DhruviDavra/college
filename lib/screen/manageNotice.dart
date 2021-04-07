@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:college_management_system/screen/noticeDetail.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:college_management_system/objects/noticeObject.dart';
@@ -112,9 +113,17 @@ noticeAll.clear();
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.90,
                     child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
+                        ?Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                ),
+                                SpinKitChasingDots(
+                                  color: Colors.blueGrey,
+                                ),
+                              ],
+                            )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: noticeAll.length,

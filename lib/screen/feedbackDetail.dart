@@ -1,4 +1,5 @@
 import 'package:college_management_system/objects/feedbackObject.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'homeScreen.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
     _isStudent =
         Provider.of<FeedbackProvider>(context, listen: false).isStudent;
     email = Provider.of<FeedbackProvider>(context, listen: false).email;
-    
+
     time = Provider.of<FeedbackProvider>(context, listen: false).time;
     // print(email);
 
@@ -76,10 +77,15 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
             ),
           ),
           body: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.blueGrey,
-                  ),
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                    ),
+                    SpinKitChasingDots(
+                      color: Colors.blueGrey,
+                    ),
+                  ],
                 )
               : SingleChildScrollView(
                   child: Container(

@@ -1,6 +1,9 @@
+import 'package:college_management_system/objects/leaveObject.dart';
 import 'package:college_management_system/objects/studentObject.dart';
 import 'package:college_management_system/objects/usersObject.dart';
+import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
+import 'package:college_management_system/screen/leaveDetail.dart';
 import 'package:college_management_system/screen/leaveForm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +17,7 @@ class StudentLeave extends StatefulWidget {
 class _StudentLeaveState extends State<StudentLeave> {
   bool _isLoading = false;
   void navigateToPage(BuildContext context) async {
+    leaveData.clear();
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
   }
@@ -56,6 +60,8 @@ class _StudentLeaveState extends State<StudentLeave> {
       setState(() {
         _isLoading = true;
       });
+    leaveData.clear();
+//studentObject.clear();
 
     email = Provider.of<StudentProvider>(context, listen: false).profileEmail;
     // print(email);
@@ -63,7 +69,8 @@ class _StudentLeaveState extends State<StudentLeave> {
         .getParticularStudent(email);
     userInfoObj = await Provider.of<StudentProvider>(context, listen: false)
         .getParticularUser(email);
-
+    leaveData = await Provider.of<LeaveProvider>(context, listen: false)
+        .getLeaveDetailForStudent();
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -72,10 +79,12 @@ class _StudentLeaveState extends State<StudentLeave> {
 
   StudentObject studentObject = StudentObject();
   UserInfoObj userInfoObj = UserInfoObj();
-
+  List<LeaveObject> leaveData = [];
   @override
   void initState() {
     super.initState();
+
+    leaveData.clear();
     getData();
   }
 
@@ -101,7 +110,7 @@ class _StudentLeaveState extends State<StudentLeave> {
           body: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(1),
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(5),
               child: Column(
                 children: [
                   SizedBox(
@@ -110,42 +119,63 @@ class _StudentLeaveState extends State<StudentLeave> {
                         ? Center(child: CircularProgressIndicator())
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
+                            itemCount: leaveData.length,
                             itemBuilder: (context, i) => Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                child: ListTile(
-                                  isThreeLine: true,
-                                  title: Row(
-                                    children: [
-                                      Text(
-                                        "Title",
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Spacer(),
-                                      Text("Date"),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Description"),
-                                      Text("Status"),
-                                    ],
-                                  ),
-                                ),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.08,
-                                width: MediaQuery.of(context).size.width * 0.01,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      offset: Offset(0.0, 1.0), //(x,y)
-                                      blurRadius: 6.0,
+                              child: InkWell(
+                                onTap: () {
+                                  // print(leaveData[i].applytime);
+                                  Provider.of<LeaveProvider>(context,
+                                          listen: false)
+                                      .time = leaveData[i].applytime;
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => LeaveDetail()));
+                                },
+                                child: Container(
+                                  child: ListTile(
+                                    isThreeLine: true,
+                                    title: Row(
+                                      children: [
+                                        Text(
+                                          leaveData[i].title,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        Spacer(),
+                                        Text(Provider.of<LeaveProvider>(context,
+                                                listen: false)
+                                            .epochToLocal(
+                                                leaveData[i].applytime)),
+                                      ],
                                     ),
-                                  ],
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(" "),
+                                        Text("Apply Date: " +
+                                            Provider.of<LeaveProvider>(context,
+                                                    listen: false)
+                                                .epochToLocal(
+                                                    leaveData[i].applytime)),
+                                        Text(" "),
+                                        Text("Status: " + leaveData[i].status),
+                                      ],
+                                    ),
+                                  ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.14,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(0.0, 1.0), //(x,y)
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

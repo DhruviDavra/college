@@ -50,6 +50,8 @@ dependencies:
   shimmer: ^0.0.4
   data_connection_checker: ^0.1.0
   connectivity: ^0.4.8+2 
+  carousel_slider: ^0.0.3
+  flutter_spinkit: ^4.1.2
   
 
 dev_dependencies:
@@ -87,6 +89,12 @@ flutter:
     - assets/images/instragram.JPG
     - assets/images/mail.JPG
     - assets/images/tmtlogo.JPG
+    - assets/images/slider1.JPG
+    - assets/images/slider2.JPG
+    - assets/images/slider3.JPG
+    - assets/images/slider4.JPG
+    - assets/images/slider5.JPG
+    - assets/images/slider6.JPG
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

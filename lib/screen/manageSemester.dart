@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,7 +36,7 @@ class _SemesterState extends State<Semester> {
       setState(() {
         _isLoading = true;
       });
-semester.clear();
+    semester.clear();
     semester = await Provider.of<SemesterProvider>(context, listen: false)
         .getSemesterDetail();
     if (mounted)
@@ -74,10 +75,16 @@ semester.clear();
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.blueGrey,
-                            ),
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                              ),
+                              SpinKitChasingDots(
+                                color: Colors.blueGrey,
+                              ),
+                            ],
                           )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
@@ -87,14 +94,12 @@ semester.clear();
                               child: ClipRRect(
                                 child: Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width *
-                                            0.01,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.01,
                                       ),
                                       Text(
                                         semester[i].sem,
@@ -113,7 +118,6 @@ semester.clear();
                                   decoration: BoxDecoration(
                                     color: Colors.blueGrey[400],
                                     borderRadius: BorderRadius.circular(15),
-                                   
                                   ),
                                 ),
                               ),

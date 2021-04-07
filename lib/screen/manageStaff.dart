@@ -3,8 +3,8 @@ import 'package:college_management_system/objects/teachingStaffObject.dart';
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/teachingStaffProvider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'staffProfile.dart';
@@ -137,8 +137,16 @@ class _StaffState extends State<Staff> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.9,
                       child: _isLoading
-                          ? Center(
-                              child: CircularProgressIndicator(),
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                ),
+                                SpinKitChasingDots(
+                                  color: Colors.blueGrey,
+                                ),
+                              ],
                             )
                           : ListView.builder(
                               scrollDirection: Axis.vertical,

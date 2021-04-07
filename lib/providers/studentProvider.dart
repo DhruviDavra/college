@@ -12,8 +12,11 @@ class StudentProvider extends ChangeNotifier {
   String profileEmail;
   String sem;
 
-  List<StudentObject> studentDetails = [];
-  List<UserInfoObj> userDetails = [];
+  List<StudentObject> studentDetailsOfA = [];
+  List<UserInfoObj> userDetailsOfA = [];
+
+  List<StudentObject> studentDetailsOfB = [];
+  List<UserInfoObj> userDetailsOfB = [];
 
   addStudent(StudentObject studentObject) {
     try {
@@ -31,29 +34,31 @@ class StudentProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<StudentObject>> getStudentDetail(String s) async {
-    QuerySnapshot teachingData =
+  Future<List<StudentObject>> getStudentDetailOfA(String s) async {
+    QuerySnapshot studentData =
         await FirebaseFirestore.instance.collection("tbl_student").get();
-    for (int i = 0; i < teachingData.docs.length; i++) {
+    for (int i = 0; i < studentData.docs.length; i++) {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("tbl_student")
-          .where("email", isEqualTo: teachingData.docs[i].data()["email"])
+          .where("email", isEqualTo: studentData.docs[i].data()["email"])
           .where("sem", isEqualTo: s)
+          .where("div", isEqualTo: "A")
           .get();
-     // print("length " + querySnapshot.docs.length.toString());
+      // print("length " + querySnapshot.docs.length.toString());
 
       if (querySnapshot.docs.length > 0) {
-        studentDetails.add(studentObjectFromJson(
+        studentDetailsOfA.add(studentObjectFromJson(
             json.encode(querySnapshot.docs.first.data())));
       }
     } //for
-    return studentDetails;
+    return studentDetailsOfA;
   }
 
-  Future<List<UserInfoObj>> getUserDetail(String s) async {
+  Future<List<UserInfoObj>> getUserDetailOfA(String s) async {
     QuerySnapshot studentData = await FirebaseFirestore.instance
         .collection("tbl_student")
         .where("sem", isEqualTo: s)
+        .where("div", isEqualTo: "A")
         .get();
 
     for (int i = 0; i < studentData.docs.length; i++) {
@@ -62,10 +67,51 @@ class StudentProvider extends ChangeNotifier {
           .where("email", isEqualTo: studentData.docs[i].data()["email"])
           .get();
 
-      userDetails.add(
+      userDetailsOfA.add(
           userInfoObjFromJson(json.encode(querySnapshot.docs.first.data())));
     } //for
-    return userDetails;
+    return userDetailsOfA;
+  }
+
+  
+
+  Future<List<StudentObject>> getStudentDetailOfB(String s) async {
+    QuerySnapshot studentData =
+        await FirebaseFirestore.instance.collection("tbl_student").get();
+    for (int i = 0; i < studentData.docs.length; i++) {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("tbl_student")
+          .where("email", isEqualTo: studentData.docs[i].data()["email"])
+          .where("sem", isEqualTo: s)
+          .where("div", isEqualTo: "B")
+          .get();
+      // print("length " + querySnapshot.docs.length.toString());
+
+      if (querySnapshot.docs.length > 0) {
+        studentDetailsOfB.add(studentObjectFromJson(
+            json.encode(querySnapshot.docs.first.data())));
+      }
+    } //for
+    return studentDetailsOfB;
+  }
+
+  Future<List<UserInfoObj>> getUserDetailOfB(String s) async {
+    QuerySnapshot studentData = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("sem", isEqualTo: s)
+        .where("div", isEqualTo: "B")
+        .get();
+
+    for (int i = 0; i < studentData.docs.length; i++) {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("tbl_users")
+          .where("email", isEqualTo: studentData.docs[i].data()["email"])
+          .get();
+
+      userDetailsOfB.add(
+          userInfoObjFromJson(json.encode(querySnapshot.docs.first.data())));
+    } //for
+    return userDetailsOfB;
   }
 
   updateStudent(String email, StudentObject studentObject) async {
@@ -144,8 +190,7 @@ class StudentProvider extends ChangeNotifier {
         .collection("tbl_student")
         .where("email", isEqualTo: email)
         .get();
-    return studentObjectFromJson(
-        json.encode(querySnapshot.docs.first.data()));
+    return studentObjectFromJson(json.encode(querySnapshot.docs.first.data()));
   }
 
   getParticularUser(String email) async {
@@ -156,7 +201,7 @@ class StudentProvider extends ChangeNotifier {
     return userInfoObjFromJson(json.encode(querySnapshot.docs.first.data()));
   }
 
-  countStaff() async {
+  countStudent() async {
     QuerySnapshot countStaff =
         await FirebaseFirestore.instance.collection("tbl_student").get();
     return countStaff.docs.length.toString();

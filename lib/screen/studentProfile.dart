@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'homeScreen.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class StudentDetail extends StatefulWidget {
   @override
@@ -69,7 +70,17 @@ class _StudentDetailState extends State<StudentDetail> {
             child: Container(
               margin: EdgeInsets.all(15),
               child: _isLoading
-                  ? Center(child: CircularProgressIndicator(),)
+                  ?Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height*0.4,
+                      ),
+                      SpinKitChasingDots(
+                        color:Colors.blueGrey,
+                      ),
+                    ],
+                  )
+                 
                   : Column(
                       children: [
                         SizedBox(

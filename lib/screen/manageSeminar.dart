@@ -1,5 +1,6 @@
 import 'package:college_management_system/objects/seminarObject.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/seminarProvider.dart';
@@ -20,7 +21,7 @@ class _SeminarState extends State<Seminar> {
   }
 
   bool _isLoading = false;
- 
+
   String time;
   SeminarObject seminarObject = SeminarObject();
   TextEditingController topicCon = TextEditingController();
@@ -111,10 +112,16 @@ class _SeminarState extends State<Seminar> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.9,
                     child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.blueGrey,
-                            ),
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                              ),
+                              SpinKitChasingDots(
+                                color: Colors.blueGrey,
+                              ),
+                            ],
                           )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
@@ -123,11 +130,16 @@ class _SeminarState extends State<Seminar> {
                               padding: const EdgeInsets.all(10.0),
                               child: Container(
                                 child: InkWell(
-                                 onTap: (){
-                                   Provider.of<SeminarProvider>(context,listen: false).detailTime=seminarAll[i].time;
-                                 
-                                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SeminarDetail()));
-                                 },
+                                  onTap: () {
+                                    Provider.of<SeminarProvider>(context,
+                                            listen: false)
+                                        .detailTime = seminarAll[i].time;
+
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SeminarDetail()));
+                                  },
                                   child: Row(
                                     children: [
                                       SizedBox(
@@ -177,7 +189,6 @@ class _SeminarState extends State<Seminar> {
               this.speakerCon.clear();
               this.dateCon.clear();
 
-             
               addSeminar(context);
             },
           ),
@@ -191,7 +202,6 @@ class _SeminarState extends State<Seminar> {
       children: [
         InkWell(
           onTap: () {
-           
             topicCon.text = seminarAll[i].topic;
             desCon.text = seminarAll[i].des;
             dateCon.text = seminarAll[i].date;
@@ -221,8 +231,7 @@ class _SeminarState extends State<Seminar> {
                       FlatButton(
                           onPressed: () {
                             setState(() {
-                              print(
-                                  seminarAll[i].time);
+                              print(seminarAll[i].time);
                               Provider.of<SeminarProvider>(context,
                                       listen: false)
                                   .deleteSeminar(seminarAll[i].time);
@@ -483,7 +492,7 @@ class _SeminarState extends State<Seminar> {
                           seminarObject.sem = selectedSem;
                           seminarObject.date = dateCon.text;
                           seminarObject.seminarTime = timeCon.text;
-                         
+
                           seminarObject.organizer = organizerCon.text;
                           seminarObject.speaker = speakerCon.text;
                           // print(seminarObject.topic);
@@ -496,9 +505,8 @@ class _SeminarState extends State<Seminar> {
                           // print(seminarObject.speaker);
                           // print(seminarObject.sem);
 
-                          Provider.of<SeminarProvider>(context,
-                                      listen: false)
-                                  .addSeminar(seminarObject);
+                          Provider.of<SeminarProvider>(context, listen: false)
+                              .addSeminar(seminarObject);
 
                           setState(() {
                             seminarAll.clear();

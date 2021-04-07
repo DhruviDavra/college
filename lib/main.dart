@@ -1,4 +1,5 @@
 import 'package:college_management_system/providers/feedbackProvider.dart';
+import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:college_management_system/screen/splashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,6 +49,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<NoticeProvider>(
           create: (_) => NoticeProvider(),
+        ),
+          ChangeNotifierProvider<LeaveProvider>(
+          create: (_) => LeaveProvider(),
         ),
       ],
       child: MaterialApp(

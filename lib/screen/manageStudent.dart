@@ -5,9 +5,9 @@ import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:college_management_system/objects/studentObject.dart';
 import 'package:college_management_system/screen/studentProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'homeScreen.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class Student extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class Student extends StatefulWidget {
 class _StudentState extends State<Student> {
   bool _isLoading = false;
   bool _isEdit = false;
-  bool _isSelectedDiv = false;
+ 
   List<int> yearList = [
     2010,
     2011,
@@ -35,8 +35,10 @@ class _StudentState extends State<Student> {
   String sem;
   String selectedYear;
   void navigateToPage(BuildContext context) async {
-    studentAll.clear();
-    userAll.clear();
+    userOfB.clear();
+    userOfA.clear();
+    studentOfB.clear();
+    studentOfA.clear();
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
   }
@@ -57,8 +59,12 @@ class _StudentState extends State<Student> {
         .addStudent(studentObject);
   }
 
-  List<StudentObject> studentAll = [];
-  List<UserInfoObj> userAll = [];
+  List<StudentObject> studentOfA = [];
+  List<UserInfoObj> userOfA = [];
+
+  List<StudentObject> studentOfB = [];
+  List<UserInfoObj> userOfB = [];
+
   UserInfoObj userInfoObj = UserInfoObj();
   StudentObject studentObject = StudentObject();
   TextEditingController fnameCon = TextEditingController();
@@ -111,7 +117,6 @@ class _StudentState extends State<Student> {
         },
       ),
     );
-    
   }
 
   QuerySnapshot divData;
@@ -122,24 +127,31 @@ class _StudentState extends State<Student> {
         _isLoading = true;
       });
     selectedSem = Provider.of<StudentProvider>(context, listen: false).sem;
-  division.clear();
-  studentAll.clear();
-  userAll.clear();
-    divData = await FirebaseFirestore.instance
-        .collection("tbl_division")
-        .where("sem", isEqualTo: selectedSem)
-        .orderBy("id")
-        .get();
+    division.clear();
+    studentOfA.clear();
+    userOfA.clear();
+    studentOfB.clear();
+    userOfB.clear();
+    // divData = await FirebaseFirestore.instance
+    //     .collection("tbl_division")
+    //     .where("sem", isEqualTo: selectedSem)
+    //     .orderBy("id")
+    //     .get();
     //  print(quaData.docs.length);
-    for (int i = 0; i < divData.docs.length; i++) {
-      division.add(divData.docs[i].data()["div"]);
-    }
+    // for (int i = 0; i < divData.docs.length; i++) {
+    //   division.add(divData.docs[i].data()["div"]);
+    // }
     // print(qualification.length);
-    studentAll = await Provider.of<StudentProvider>(context, listen: false)
-        .getStudentDetail(selectedSem);
-    userAll = await Provider.of<StudentProvider>(context, listen: false)
-        .getUserDetail(selectedSem);
-    print(userAll.length);
+    studentOfA = await Provider.of<StudentProvider>(context, listen: false)
+        .getStudentDetailOfA(selectedSem);
+    userOfA = await Provider.of<StudentProvider>(context, listen: false)
+        .getUserDetailOfA(selectedSem);
+
+    studentOfB = await Provider.of<StudentProvider>(context, listen: false)
+        .getStudentDetailOfB(selectedSem);
+    userOfB = await Provider.of<StudentProvider>(context, listen: false)
+        .getUserDetailOfB(selectedSem);
+    // print(userAll.length);
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -158,242 +170,217 @@ class _StudentState extends State<Student> {
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.blueGrey[700],
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                navigateToPage(context);
-              },
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  _isLoading
-                      ? Shimmer.fromColors(
-                          direction: ShimmerDirection.rtl,
-                          period: Duration(seconds: 3),
-                          baseColor: Colors.blueGrey[50],
-                          highlightColor: Colors.blueGrey[200],
-                          child: SizedBox(
-                          height: 70.0,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: division.length,
-                            itemBuilder: (context, i) => InkWell(
-                              onTap: () {
-                                selectedDiv = division[i];
-                                setState(() {
-                                  _isSelectedDiv = !_isSelectedDiv;
-                                });
-                                print(selectedDiv);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    height: 50.0,
-                                    color: _isSelectedDiv
-                                        ? Colors.blueGrey[300]
-                                        : Colors.blueGrey[700],
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          "Div " + division[i],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        )
-                      : SizedBox(
-                          height: 70.0,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: division.length,
-                            itemBuilder: (context, i) => InkWell(
-                              onTap: () {
-                                selectedDiv = division[i];
-                                setState(() {
-                                  _isSelectedDiv = !_isSelectedDiv;
-                                });
-                                print(selectedDiv);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    height: 50.0,
-                                    color: _isSelectedDiv
-                                        ? Colors.blueGrey[300]
-                                        : Colors.blueGrey[700],
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          "Div " + division[i],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                  
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    child: _isLoading
-                        ? Shimmer.fromColors(
-                          direction: ShimmerDirection.rtl,
-                          period: Duration(seconds: 3),
-                          baseColor: Colors.blueGrey[50],
-                          highlightColor: Colors.blueGrey[200],
-                          child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: userAll.length,
-                            itemBuilder: (context, i) => Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: InkWell(
-                                onTap: () {
-                                  print(userAll[i].email);
-                                  Provider.of<StudentProvider>(context,
-                                          listen: false)
-                                      .profileEmail = userAll[i].email;
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => StudentDetail()));
-                                },
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
-                                      ),
-                                      Text(userAll[i].fname +
-                                          " " +
-                                          userAll[i].mname +
-                                          " " +
-                                          userAll[i].lname),
-                                      Spacer(),
-                                      editDeleteButton(i),
-                                    ],
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.01,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(0.0, 1.0), //(x,y)
-                                        blurRadius: 6.0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                        : ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: userAll.length,
-                            itemBuilder: (context, i) => Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: InkWell(
-                                onTap: () {
-                                  print(userAll[i].email);
-                                  Provider.of<StudentProvider>(context,
-                                          listen: false)
-                                      .profileEmail = userAll[i].email;
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => StudentDetail()));
-                                },
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
-                                      ),
-                                      Text(userAll[i].fname +
-                                          " " +
-                                          userAll[i].mname +
-                                          " " +
-                                          userAll[i].lname),
-                                      Spacer(),
-                                      editDeleteButton(i),
-                                    ],
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.01,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(0.0, 1.0), //(x,y)
-                                        blurRadius: 6.0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+        child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.blueGrey[700],
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  navigateToPage(context);
+                },
+              ),
+              bottom: TabBar(
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      topLeft: Radius.circular(20),
+                    ), // Creates border
+                    color: Colors.blueGrey),
+                tabs: [
+                  Tab(
+                    child: Text(
+                      "Div A",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Div B",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-          floatingActionButtonLocation:
+            body: TabBarView(
+              children: [
+                SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.9,
+                          child: _isLoading
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                    ),
+                                    SpinKitChasingDots(
+                                      color: Colors.blueGrey,
+                                    ),
+                                  ],
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: userOfA.length,
+                                  itemBuilder: (context, i) => Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        print(userOfA[i].email);
+                                        Provider.of<StudentProvider>(context,
+                                                listen: false)
+                                            .profileEmail = userOfA[i].email;
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    StudentDetail()));
+                                      },
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01,
+                                            ),
+                                            Text(userOfA[i].fname +
+                                                " " +
+                                                userOfA[i].mname +
+                                                " " +
+                                                userOfA[i].lname),
+                                            Spacer(),
+                                            editDeleteButton(i),
+                                          ],
+                                        ),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.07,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.01,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey,
+                                              offset: Offset(0.0, 1.0), //(x,y)
+                                              blurRadius: 6.0,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.9,
+                          child: _isLoading
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                    ),
+                                    SpinKitChasingDots(
+                                      color: Colors.blueGrey,
+                                    ),
+                                  ],
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: userOfB.length,
+                                  itemBuilder: (context, i) => Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        print(userOfB[i].email);
+                                        Provider.of<StudentProvider>(context,
+                                                listen: false)
+                                            .profileEmail = userOfB[i].email;
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    StudentDetail()));
+                                      },
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01,
+                                            ),
+                                            Text(userOfB[i].fname +
+                                                " " +
+                                                userOfB[i].mname +
+                                                " " +
+                                                userOfB[i].lname),
+                                            Spacer(),
+                                            editDeleteButton(i),
+                                          ],
+                                        ),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.07,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.01,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey,
+                                              offset: Offset(0.0, 1.0), //(x,y)
+                                              blurRadius: 6.0,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.blueGrey,
             child: Icon(Icons.add),
             onPressed: () {
               this.fnameCon.clear();
-              this.mnameCon.clear();
-              this.lnameCon.clear();
-              this.dateCon.clear();
-              this.cnoCon.clear();
-              this.emailCon.clear();
-              this.pwdCon.clear();
-              this.rnoCon.clear();
-              this.ernoCon.clear();
-              this.ayearCon.clear();
-              _isEdit = false;
+
               addStudent(context);
             },
+          ),
           ),
         ),
       ),
@@ -407,13 +394,13 @@ class _StudentState extends State<Student> {
           onTap: () {
             _isEdit = true;
             //   print(teachingAll[i].qualification);
-            fnameCon.text = userAll[i].fname;
-            mnameCon.text = userAll[i].mname;
-            lnameCon.text = userAll[i].lname;
-            dateCon.text = userAll[i].dob;
-            cnoCon.text = userAll[i].cno;
-            emailCon.text = userAll[i].email;
-            pwdCon.text = userAll[i].password;
+            // fnameCon.text = userAll[i].fname;
+            // mnameCon.text = userAll[i].mname;
+            // lnameCon.text = userAll[i].lname;
+            // dateCon.text = userAll[i].dob;
+            // cnoCon.text = userAll[i].cno;
+            // emailCon.text = userAll[i].email;
+            // pwdCon.text = userAll[i].password;
             // selectedQua = teachingAll[i].qualification;
             // selectedDesignation = teachingAll[i].designation;
             // experienceCon.text = teachingAll[i].experience;
@@ -441,15 +428,15 @@ class _StudentState extends State<Student> {
                             setState(() {
                               // print(
                               //     userAll[i].email);
-                              Provider.of<StudentProvider>(context,
-                                      listen: false)
-                                  .deleteStudent(userAll[i].email);
-                              
-                              setState(() {
-                                userAll.clear();
-                              studentAll.clear();
-                                fetchData();
-                              });
+                              // Provider.of<StudentProvider>(context,
+                              //         listen: false)
+                              //     .deleteStudent(userAll[i].email);
+
+                              // setState(() {
+                              //   userAll.clear();
+                              //   studentAll.clear();
+                              //   fetchData();
+                              // });
                               Navigator.of(context).pop();
                             });
                           },
@@ -835,9 +822,11 @@ class _StudentState extends State<Student> {
                               : await insert();
 
                           setState(() {
-                            userAll.clear();
-                            division.clear();
-                            studentAll.clear();
+                           userOfB.clear();
+                          //  division.clear();
+                            userOfA.clear();
+                            studentOfA.clear();
+                            studentOfB.clear();
                             fetchData();
                           });
                           Navigator.of(context).pop();
