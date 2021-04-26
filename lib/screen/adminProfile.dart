@@ -1,5 +1,5 @@
 import 'package:college_management_system/objects/usersObject.dart';
-import './homeScreen.dart';
+import 'package:college_management_system/screen/adminHome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
@@ -12,7 +12,7 @@ class AdminProfile extends StatefulWidget {
 class _AdminProfileState extends State<AdminProfile> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .push(MaterialPageRoute(builder: (context) => AdminHome()));
   }
 
   UserInfoObj userObj = UserInfoObj();
@@ -47,6 +47,7 @@ class _AdminProfileState extends State<AdminProfile> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

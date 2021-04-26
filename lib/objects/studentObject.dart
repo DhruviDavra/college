@@ -16,6 +16,7 @@ class StudentObject {
         this.div,
         this.sem,
         this.acadamicYear,
+        this.name,
     });
 
     int rno;
@@ -24,6 +25,7 @@ class StudentObject {
     String div;
     String sem;
     String acadamicYear;
+    String name;
 
     factory StudentObject.fromJson(Map<String, dynamic> json) => StudentObject(
         rno: json["rno"],
@@ -32,6 +34,7 @@ class StudentObject {
         div: json["div"],
         sem: json["sem"],
         acadamicYear: json["acadamic-year"],
+        
     );
 
     Map<String, dynamic> toJson() => {
@@ -42,4 +45,5 @@ class StudentObject {
         "sem": sem,
         "acadamic-year": acadamicYear,
     };
+    
 }

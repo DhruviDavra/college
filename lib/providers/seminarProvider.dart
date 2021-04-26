@@ -27,6 +27,7 @@ class SeminarProvider extends ChangeNotifier {
   }
 
   Future<List<SeminarObject>> getSeminarDetail() async {
+    seminarDetails.clear();
     QuerySnapshot seminarData =
         await FirebaseFirestore.instance.collection("tbl_seminar").get();
     for (int i = 0; i < seminarData.docs.length; i++) {
@@ -73,11 +74,11 @@ class SeminarProvider extends ChangeNotifier {
 
   deleteSeminar(String time) async {
     print(time);
-    QuerySnapshot teachingQuery = await FirebaseFirestore.instance
+    QuerySnapshot seminarQuery = await FirebaseFirestore.instance
         .collection("tbl_seminar")
         .where("time", isEqualTo: time)
         .get();
-    teachingQuery.docs.forEach(
+    seminarQuery.docs.forEach(
       (element) async {
         await FirebaseFirestore.instance
             .collection("tbl_seminar")

@@ -13,6 +13,7 @@ class FeedbackProvider extends ChangeNotifier {
   List<FeedbackObject> allFeedbacks=[];
   List<FeedbackObject> feedbackStudentWise = [];
   String studentEmail;
+  String uploadtime;
   String email;
   String time;
   bool isStudent = false;
@@ -27,10 +28,10 @@ class FeedbackProvider extends ChangeNotifier {
     });
   }
 
-  getParticularfeedback(String email) async {
+  getParticularfeedback(String uploadtime) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("tbl_feedback")
-        .where("email", isEqualTo: email)
+        .where("time", isEqualTo: uploadtime)
         .get();
     return feedbackObjectFromJson(json.encode(querySnapshot.docs.first.data()));
   }
@@ -49,6 +50,7 @@ class FeedbackProvider extends ChangeNotifier {
   }
 
    Future<List<FeedbackObject>> allFeedback() async {
+     allFeedbacks.clear();
     QuerySnapshot feedbackData = await FirebaseFirestore.instance
         .collection("tbl_feedback")
         .orderBy("time")
@@ -70,6 +72,7 @@ class FeedbackProvider extends ChangeNotifier {
 
   Future<List<FeedbackObject>> getFeedbackDetailStudentWise(
       String email) async {
+        feedbackStudentWise.clear();
     print(email);
     QuerySnapshot feedbackData = await FirebaseFirestore.instance
         .collection("tbl_feedback")

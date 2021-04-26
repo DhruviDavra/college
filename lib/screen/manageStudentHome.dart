@@ -1,12 +1,12 @@
+// import 'package:college_management_system/screen/temp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_management_system/providers/semesterProvider.dart';
 import 'package:college_management_system/objects/semesterObject.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
-import 'manageStudent.dart';
+import 'manageStudentA.dart';
 
 class StudentAdminHome extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _StudentAdminHomeState extends State<StudentAdminHome> {
     semester.clear();
 
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+      .pop();
   }
 
   bool _isLoading = false;
@@ -59,6 +59,7 @@ class _StudentAdminHomeState extends State<StudentAdminHome> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -104,7 +105,7 @@ class _StudentAdminHomeState extends State<StudentAdminHome> {
 
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (context) => Student()));
+                                              builder: (context) => StudentA()));
                                     },
                                     child: Row(
                                       mainAxisAlignment:

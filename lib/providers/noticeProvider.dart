@@ -27,6 +27,7 @@ class NoticeProvider extends ChangeNotifier {
   }
 
   Future<List<NoticeObject>> getNoticeDetail() async {
+    noticeDetails.clear();
     QuerySnapshot noticeData =
         await FirebaseFirestore.instance.collection("tbl_notice").get();
     for (int i = 0; i < noticeData.docs.length; i++) {

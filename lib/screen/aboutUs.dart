@@ -1,5 +1,5 @@
+
 import 'package:flutter/material.dart';
-import 'homeScreen.dart';
 import 'package:blinking_text/blinking_text.dart';
 
 class AboutUs extends StatefulWidget {
@@ -10,7 +10,7 @@ class AboutUs extends StatefulWidget {
 class _AboutUsState extends State<AboutUs> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .pop();
   }
 
   @override

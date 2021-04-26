@@ -15,6 +15,10 @@ import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import 'studentAssignment.dart';
+import 'studentEbook.dart';
+import 'studentSyllabus.dart';
+
 class StudentHome extends StatefulWidget {
   @override
   _StudentHomeState createState() => _StudentHomeState();
@@ -58,12 +62,12 @@ class _StudentHomeState extends State<StudentHome> {
           drawer: drawer(),
           body: Stack(
             children: [
-             ListView(
-        children: [
-          CarouselSlider(
-            autoPlay: true,
-              items: [
-                Container(
+              ListView(
+                children: [
+                  CarouselSlider(
+                    autoPlay: true,
+                    items: [
+                      Container(
                         margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
@@ -103,7 +107,7 @@ class _StudentHomeState extends State<StudentHome> {
                           ),
                         ),
                       ),
-                       Container(
+                      Container(
                         margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
@@ -113,7 +117,7 @@ class _StudentHomeState extends State<StudentHome> {
                           ),
                         ),
                       ),
-                       Container(
+                      Container(
                         margin: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
@@ -123,10 +127,10 @@ class _StudentHomeState extends State<StudentHome> {
                           ),
                         ),
                       ),
-              ],
-          ),
-              ],
-             ),
+                    ],
+                  ),
+                ],
+              ),
               SingleChildScrollView(
                 child: Column(
                   children: [
@@ -134,8 +138,8 @@ class _StudentHomeState extends State<StudentHome> {
                       height: MediaQuery.of(context).size.height * 0.3,
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height*0.92,
-                       decoration: BoxDecoration(
+                      height: MediaQuery.of(context).size.height * 0.92,
+                      decoration: BoxDecoration(
                         color: Colors.blueGrey[100],
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(60.0),
@@ -147,7 +151,7 @@ class _StudentHomeState extends State<StudentHome> {
                           right: MediaQuery.of(context).size.width * 0.04,
                           left: MediaQuery.of(context).size.width * 0.05,
                           top: MediaQuery.of(context).size.height * 0.04,
-                          bottom: MediaQuery.of(context).size.height*0.04,
+                          bottom: MediaQuery.of(context).size.height * 0.04,
                         ),
                         child: Column(
                           children: [
@@ -159,7 +163,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -221,7 +225,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -290,7 +294,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -351,7 +355,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -420,7 +424,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -481,7 +485,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -550,7 +554,7 @@ class _StudentHomeState extends State<StudentHome> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
                                   width:
-                                      MediaQuery.of(context).size.height * 0.22,
+                                      MediaQuery.of(context).size.height * 0.20,
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: [
@@ -621,7 +625,7 @@ class _StudentHomeState extends State<StudentHome> {
                                               0.16,
                                       width:
                                           MediaQuery.of(context).size.height *
-                                              0.22,
+                                              0.20,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         boxShadow: [
@@ -687,9 +691,9 @@ class _StudentHomeState extends State<StudentHome> {
                         ),
                       ),
                     ),
-                   
+
                     //  Container(
-                      
+
                     //    color: Colors.blueGrey[100],
                     //     height: MediaQuery.of(context).size.height * 0.2,
                     //  ),
@@ -799,7 +803,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentAssignment()));
             },
           ),
           ListTile(
@@ -813,7 +818,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentEBook()));
             },
           ),
           ListTile(
@@ -827,7 +833,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentSyllabus()));
             },
           ),
           ListTile(

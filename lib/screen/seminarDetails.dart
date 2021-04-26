@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'homeScreen.dart';
 import 'package:college_management_system/objects/seminarObject.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/seminarProvider.dart';
@@ -11,8 +10,7 @@ class SeminarDetail extends StatefulWidget {
 
 class _SeminarDetailState extends State<SeminarDetail> {
   void navigateToPage(BuildContext context) async {
-    Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pop();
   }
 
   bool _isLoading = false;
@@ -53,6 +51,7 @@ class _SeminarDetailState extends State<SeminarDetail> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             title: Text("Seminar Detail"),
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
@@ -65,10 +64,10 @@ class _SeminarDetailState extends State<SeminarDetail> {
           body: SingleChildScrollView(
             child: _isLoading
                 ? Center(
-                  child: CircularProgressIndicator(
+                    child: CircularProgressIndicator(
                       backgroundColor: Colors.blueGrey,
                     ),
-                )
+                  )
                 : Container(
                     margin: EdgeInsets.all(15),
                     child: Column(

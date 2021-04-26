@@ -1,3 +1,4 @@
+import 'package:college_management_system/providers/examProvider.dart';
 import 'package:college_management_system/providers/feedbackProvider.dart';
 import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
@@ -7,9 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/userProvider.dart';
 import './providers/teachingStaffProvider.dart';
+import 'providers/nonTeachingStaffProvider.dart';
 import 'providers/seminarProvider.dart';
 import 'package:college_management_system/providers/semesterProvider.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
+import 'package:college_management_system/providers/attendanceProvider.dart';
+import 'package:college_management_system/providers/subjectProvider.dart';
+import 'package:college_management_system/providers/syllabusProvider.dart';
+import 'package:college_management_system/providers/assignmentProvider.dart';
+import 'providers/bookProvider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +31,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
- 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -34,6 +40,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<TeachingStaffProvider>(
           create: (_) => TeachingStaffProvider(),
+        ),
+         ChangeNotifierProvider<NonTeachingStaffProvider>(
+          create: (_) => NonTeachingStaffProvider(),
         ),
         ChangeNotifierProvider<SeminarProvider>(
           create: (_) => SeminarProvider(),
@@ -50,13 +59,30 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<NoticeProvider>(
           create: (_) => NoticeProvider(),
         ),
-          ChangeNotifierProvider<LeaveProvider>(
+        ChangeNotifierProvider<LeaveProvider>(
           create: (_) => LeaveProvider(),
+        ),
+        ChangeNotifierProvider<AttendanceProvider>(
+          create: (_) => AttendanceProvider(),
+        ),
+        ChangeNotifierProvider<SubjectProvider>(
+          create: (_) => SubjectProvider(),
+        ),
+        ChangeNotifierProvider<SyllabusProvider>(
+          create: (_) => SyllabusProvider(),
+        ),
+         ChangeNotifierProvider<AssignmentProvider>(
+          create: (_) => AssignmentProvider(),
+        ),
+          ChangeNotifierProvider<BookProvider>(
+          create: (_) => BookProvider(),
+        ),
+         ChangeNotifierProvider<ExamProvider>(
+          create: (_) => ExamProvider(),
         ),
       ],
       child: MaterialApp(
-        home:SplashScreen(),
-      
+        home: SplashScreen(),
       ),
     );
   }

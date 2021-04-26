@@ -3,9 +3,9 @@ import 'package:college_management_system/objects/teachingStaffObject.dart';
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/teachingStaffProvider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
+import 'package:college_management_system/screen/adminHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'staffProfile.dart';
 
@@ -15,13 +15,16 @@ class Staff extends StatefulWidget {
 }
 
 class _StaffState extends State<Staff> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   bool _isLoading = false;
   bool _isEdit = false;
   void navigateToPage(BuildContext context) async {
     teachingAll.clear();
     userAll.clear();
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .push(MaterialPageRoute(builder: (context) => AdminHome()));
   }
 
   @override
@@ -113,13 +116,17 @@ class _StaffState extends State<Staff> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _key,
+      autovalidateMode: autovalidateMode,
       child: SafeArea(
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: Scaffold(
+            
             appBar: AppBar(
+              centerTitle: true,
               backgroundColor: Colors.blueGrey[700],
               leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
@@ -152,7 +159,7 @@ class _StaffState extends State<Staff> {
                               scrollDirection: Axis.vertical,
                               itemCount: userAll.length,
                               itemBuilder: (context, i) => Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () {
                                     print(userAll[i].email);
@@ -165,7 +172,12 @@ class _StaffState extends State<Staff> {
                                                 StaffProfile()));
                                   },
                                   child: Container(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
                                           width: MediaQuery.of(context)
@@ -174,9 +186,14 @@ class _StaffState extends State<Staff> {
                                               0.01,
                                         ),
                                         Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              userAll[i].fname +
+                                              "Name: " +
+                                                  userAll[i].fname +
                                                   " " +
                                                   userAll[i].mname +
                                                   " " +
@@ -186,7 +203,8 @@ class _StaffState extends State<Staff> {
                                                 fontSize: 16,
                                               ),
                                             ),
-                                            Text(teachingAll[i].designation),
+                                            Text("Designation " +
+                                                teachingAll[i].designation),
                                           ],
                                         ),
                                         Spacer(),
@@ -194,7 +212,7 @@ class _StaffState extends State<Staff> {
                                       ],
                                     ),
                                     height: MediaQuery.of(context).size.height *
-                                        0.08,
+                                        0.1,
                                     width: MediaQuery.of(context).size.width *
                                         0.01,
                                     decoration: BoxDecoration(
@@ -258,7 +276,7 @@ class _StaffState extends State<Staff> {
             pwdCon.text = userAll[i].password;
             selectedQua = teachingAll[i].qualification;
             selectedDesignation = teachingAll[i].designation;
-            experienceCon.text = teachingAll[i].experience;
+            experienceCon.text = teachingAll[i].experience.toString();
             specialIntCon.text = teachingAll[i].specialinterest;
             addStaff(context);
           },
@@ -313,6 +331,7 @@ class _StaffState extends State<Staff> {
     );
   }
 
+// Form  no user karyo 6e ? ha tya lai ja to
   addStaff(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
@@ -642,6 +661,15 @@ class _StaffState extends State<Staff> {
                       color: Colors.blueGrey,
                       onPressed: () async {
                         try {
+                          // Validate Form fields data and return if data is not validated...
+                          if (!_key.currentState.validate()) {
+                            if (mounted) {
+                              setState(() {
+                                autovalidateMode = AutovalidateMode.always;
+                              });
+                            }
+                            return;
+                          }
                           print(fnameCon.text);
                           print(mnameCon.text);
                           print(lnameCon.text);
@@ -668,15 +696,15 @@ class _StaffState extends State<Staff> {
                           teachingStaffObject.qualification = selectedQua;
                           teachingStaffObject.specialinterest =
                               specialIntCon.text;
-                          teachingStaffObject.experience = experienceCon.text;
+                          teachingStaffObject.experience =int.parse(experienceCon.text);
                           print(teachingStaffObject.qualification);
-                          // _isEdit
-                          //     ? await Provider.of<TeachingStaffProvider>(
-                          //             context,
-                          //             listen: false)
-                          //         .update(emailCon.text, userInfoObj,
-                          //             teachingStaffObject)
-                          //     : await insert();
+                          _isEdit
+                              ? await Provider.of<TeachingStaffProvider>(
+                                      context,
+                                      listen: false)
+                                  .update(emailCon.text, userInfoObj,
+                                      teachingStaffObject)
+                              : await insert();
 
                           setState(() {
                             userAll.clear();

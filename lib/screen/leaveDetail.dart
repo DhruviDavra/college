@@ -3,7 +3,6 @@ import 'package:college_management_system/objects/studentObject.dart';
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
-import 'package:college_management_system/screen/studentLeave.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,7 @@ class _LeaveDetailState extends State<LeaveDetail> {
   void navigateToPage(BuildContext context) async {
    
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => StudentLeave()));
+        .pop();
   }
 
   LeaveObject leaveObject = LeaveObject();
@@ -31,7 +30,7 @@ class _LeaveDetailState extends State<LeaveDetail> {
       });
 
     email = Provider.of<StudentProvider>(context, listen: false).profileEmail;
-    // print(email);
+  
     studentObject = await Provider.of<StudentProvider>(context, listen: false)
         .getParticularStudent(email);
     userInfoObj = await Provider.of<StudentProvider>(context, listen: false)
@@ -62,6 +61,7 @@ class _LeaveDetailState extends State<LeaveDetail> {
       },
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text("Leave Detail"),
           backgroundColor: Colors.blueGrey[700],
           leading: IconButton(

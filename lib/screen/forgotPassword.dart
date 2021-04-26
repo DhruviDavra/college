@@ -11,7 +11,7 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .push(MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   TextEditingController emailCon = TextEditingController();
@@ -25,6 +25,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

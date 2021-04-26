@@ -1,5 +1,5 @@
+
 import 'package:flutter/material.dart';
-import 'homeScreen.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,7 +11,7 @@ class ContactUs extends StatefulWidget {
 class _ContactUsState extends State<ContactUs> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .pop();
   }
 
   void _launchURL() async =>
@@ -36,6 +36,7 @@ class _ContactUsState extends State<ContactUs> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

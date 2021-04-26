@@ -1,4 +1,4 @@
-import './homeScreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
@@ -12,7 +12,7 @@ class ChangePassword extends StatefulWidget {
 class _ChangePasswordState extends State<ChangePassword> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .push(MaterialPageRoute(builder: (context) => AdminHome()));
   }
 
   bool _showPassword = false;
@@ -31,6 +31,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

@@ -5,9 +5,9 @@ import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:college_management_system/screen/leaveDetail.dart';
 import 'package:college_management_system/screen/leaveForm.dart';
+import 'package:college_management_system/screen/studentHome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'homeScreen.dart';
 
 class StudentLeave extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _StudentLeaveState extends State<StudentLeave> {
   void navigateToPage(BuildContext context) async {
     leaveData.clear();
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .pop(MaterialPageRoute(builder: (context) => StudentHome()));
   }
 
   TextEditingController toDateCon = TextEditingController();
@@ -98,6 +98,7 @@ class _StudentLeaveState extends State<StudentLeave> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             title: Text("Apply for Leave"),
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(

@@ -135,8 +135,10 @@ noticeAll.clear();
                                   child: Row(
                                     children: [
                                       Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          Text("Upload Date: "+
                                             epochToLocal(noticeAll[i].time),
                                             style: TextStyle(
                                               fontSize: 18,
@@ -150,7 +152,7 @@ noticeAll.clear();
                                   ),
                                 ),
                                 height:
-                                    MediaQuery.of(context).size.height * 0.08,
+                                    MediaQuery.of(context).size.height * 0.09,
                                 width: MediaQuery.of(context).size.width * 0.01,
                                 decoration: BoxDecoration(
                                   color: Colors.white,

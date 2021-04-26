@@ -1,6 +1,6 @@
 import 'package:college_management_system/objects/teachingStaffObject.dart';
 import 'package:college_management_system/objects/usersObject.dart';
-import './homeScreen.dart';
+import 'package:college_management_system/screen/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/teachingStaffProvider.dart';
@@ -18,6 +18,7 @@ class _StaffProfileState extends State<StaffProfile> {
 
   String email;
   bool _isLoading = false;
+  bool _isTeachingStaff;
   @override
   void initState() {
     super.initState();
@@ -31,20 +32,28 @@ class _StaffProfileState extends State<StaffProfile> {
         _isLoading = true;
       });
 
-    email =
-        Provider.of<TeachingStaffProvider>(context, listen: false).profileEmail;
-       // print(email);
+    _isTeachingStaff =
+        Provider.of<TeachingStaffProvider>(context, listen: false)
+            .isTeachingStaffLogin;
+
+    _isTeachingStaff
+        ? email = Provider.of<TeachingStaffProvider>(context, listen: false)
+            .teachingEmail
+        : email = Provider.of<TeachingStaffProvider>(context, listen: false)
+            .profileEmail;
+
+     print(email);
     teachingStaffObject =
         await Provider.of<TeachingStaffProvider>(context, listen: false)
             .getParticularStaff(email);
     userInfoObj =
         await Provider.of<TeachingStaffProvider>(context, listen: false)
             .getParticularUser(email);
-     print(teachingStaffObject.qualification);
+    print(teachingStaffObject.qualification);
     // print(teachingStaffObject.designation);
     // print(teachingStaffObject.experience);
     // print(teachingStaffObject.specialinterest);
-   // print(teachingStaffObject.qualification);
+    // print(teachingStaffObject.qualification);
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -76,8 +85,8 @@ class _StaffProfileState extends State<StaffProfile> {
               margin: EdgeInsets.all(15),
               child: _isLoading
                   ? Center(
-                    child: CircularProgressIndicator(),
-                  )
+                      child: CircularProgressIndicator(),
+                    )
                   : Column(
                       children: [
                         SizedBox(
@@ -105,19 +114,17 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Qualification:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
-                                child: Text(
-                                    teachingStaffObject.qualification.toString()),
-                              ),
+                              flex: 1,
+                              child: Text(
+                                  teachingStaffObject.qualification.toString()),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -126,16 +133,14 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Designation:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(teachingStaffObject.designation),
                             ),
                           ],
@@ -146,16 +151,14 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Date of Birth:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 userInfoObj.dob,
                               ),
@@ -168,16 +171,14 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Contact No:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(userInfoObj.cno),
                             ),
                           ],
@@ -188,16 +189,14 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Email:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(userInfoObj.email),
                             ),
                           ],
@@ -208,17 +207,15 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Experience:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
-                              child: Text(teachingStaffObject.experience),
+                              flex: 1,
+                              child: Text(teachingStaffObject.experience.toString()),
                             ),
                           ],
                         ),
@@ -228,16 +225,14 @@ class _StaffProfileState extends State<StaffProfile> {
                         Row(
                           children: [
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(
                                 "  Special Interest:",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
                             Expanded(
-                                      flex:1,
-
+                              flex: 1,
                               child: Text(teachingStaffObject.specialinterest),
                             ),
                           ],

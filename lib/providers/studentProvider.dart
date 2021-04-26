@@ -11,7 +11,8 @@ class StudentProvider extends ChangeNotifier {
 
   String profileEmail;
   String sem;
-
+  String div;
+  StudentObject studData= StudentObject();
   List<StudentObject> studentDetailsOfA = [];
   List<UserInfoObj> userDetailsOfA = [];
 
@@ -35,15 +36,19 @@ class StudentProvider extends ChangeNotifier {
   }
 
   Future<List<StudentObject>> getStudentDetailOfA(String s) async {
-    QuerySnapshot studentData =
-        await FirebaseFirestore.instance.collection("tbl_student").get();
+    QuerySnapshot studentData = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .orderBy("rno")
+        .get();
     for (int i = 0; i < studentData.docs.length; i++) {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("tbl_student")
           .where("email", isEqualTo: studentData.docs[i].data()["email"])
           .where("sem", isEqualTo: s)
           .where("div", isEqualTo: "A")
+          .orderBy("rno")
           .get();
+
       // print("length " + querySnapshot.docs.length.toString());
 
       if (querySnapshot.docs.length > 0) {
@@ -53,12 +58,63 @@ class StudentProvider extends ChangeNotifier {
     } //for
     return studentDetailsOfA;
   }
+Future<StudentObject>emailofStudentBySemAndRno(String sem, String div, int rno) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("sem", isEqualTo: sem)
+        .where("div", isEqualTo: div)
+        .where("rno", isEqualTo: rno)
+        .get();
+
+   if (querySnapshot.docs.length > 0) {
+        studData=(studentObjectFromJson(
+            json.encode(querySnapshot.docs.first.data())));
+      }
+      return studData;
+  }
+
+//   List<StudentObject> listDocument;
+//  QuerySnapshot collectionState;
+//     fetchDocuments(Query collection){
+//     collection.get().then((value) {
+//       collectionState = value; // store collection state to set where to start next
+//       value.docs.forEach((element) {
+//         print('getDocuments ${element.data()}');
+//         listDocument.add(studentObjectFromJson(
+//             json.encode(element.data())));
+
+//       });
+//     });
+//   }
+//   Future<void> getDocuments() async {
+//     listDocument = List();
+//     var collection = FirebaseFirestore.instance
+//         .collection('tbl_student')
+//         .orderBy("rno")
+//         .limit(15);
+//     print('getDocuments');
+//     fetchDocuments(collection);
+//   }
+
+  // Fetch next 5 documents starting from the last document fetched earlier
+  // Future<void> getDocumentsNext() async {
+  //   // Get the last visible document
+  //   var lastVisible = collectionState.docs[collectionState.docs.length-1];
+  //   print('listDocument legnth: ${collectionState.size} last: $lastVisible');
+
+  //   var collection = FirebaseFirestore.instance
+  //       .collection('tbl_student')
+  //       .orderBy("rno").startAfterDocument(lastVisible).limit(5);
+
+  //   fetchDocuments(collection);
+  // }
 
   Future<List<UserInfoObj>> getUserDetailOfA(String s) async {
     QuerySnapshot studentData = await FirebaseFirestore.instance
         .collection("tbl_student")
         .where("sem", isEqualTo: s)
         .where("div", isEqualTo: "A")
+        .orderBy("rno")
         .get();
 
     for (int i = 0; i < studentData.docs.length; i++) {
@@ -73,17 +129,18 @@ class StudentProvider extends ChangeNotifier {
     return userDetailsOfA;
   }
 
-  
-
   Future<List<StudentObject>> getStudentDetailOfB(String s) async {
-    QuerySnapshot studentData =
-        await FirebaseFirestore.instance.collection("tbl_student").get();
+    QuerySnapshot studentData = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .orderBy("rno")
+        .get();
     for (int i = 0; i < studentData.docs.length; i++) {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("tbl_student")
           .where("email", isEqualTo: studentData.docs[i].data()["email"])
           .where("sem", isEqualTo: s)
           .where("div", isEqualTo: "B")
+          .orderBy("rno")
           .get();
       // print("length " + querySnapshot.docs.length.toString());
 
@@ -100,6 +157,7 @@ class StudentProvider extends ChangeNotifier {
         .collection("tbl_student")
         .where("sem", isEqualTo: s)
         .where("div", isEqualTo: "B")
+        .orderBy("rno")
         .get();
 
     for (int i = 0; i < studentData.docs.length; i++) {
@@ -205,5 +263,15 @@ class StudentProvider extends ChangeNotifier {
     QuerySnapshot countStaff =
         await FirebaseFirestore.instance.collection("tbl_student").get();
     return countStaff.docs.length.toString();
+  }
+
+  studentSemesterWise() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("sem", isEqualTo: sem)
+        .where("div", isEqualTo: div)
+        .get();
+
+    return querySnapshot.docs.length;
   }
 }

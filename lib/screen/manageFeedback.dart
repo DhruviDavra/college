@@ -2,7 +2,6 @@ import 'package:college_management_system/objects/feedbackObject.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/feedbackProvider.dart';
 import 'feedbackDetail.dart';
@@ -16,8 +15,7 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
   bool _isLoading = false;
   void navigateToPage(BuildContext context) async {
     data.clear();
-    Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pop();
   }
 
   bool _isShowAll = false;
@@ -67,6 +65,7 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -120,7 +119,7 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
                                   onTap: () {
                                     Provider.of<FeedbackProvider>(context,
                                             listen: false)
-                                        .email = allFeedback[i].email;
+                                        .uploadtime = allFeedback[i].time;
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -131,17 +130,19 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                             "Date: "+ allFeedback[i].date,
+                                              "Date: " + allFeedback[i].date,
                                               style: TextStyle(
                                                 fontSize: 18,
                                               ),
                                             ),
-                                             Text(
-                                              "\n"+allFeedback[i].email,
+                                            Text(
+                                              "\n" + allFeedback[i].email,
                                               style: TextStyle(
                                                 fontSize: 18,
                                               ),
@@ -175,6 +176,10 @@ class _FeedbackAdminState extends State<FeedbackAdmin> {
                     child: Column(
                       children: [
                         TableCalendar(
+                          calendarStyle: CalendarStyle(
+                            todayColor: Colors.blueGrey[300],
+                            selectedColor: Colors.blueGrey[700],
+                          ),
                           calendarController: calcon,
                           initialSelectedDay: DateTime.now(),
                           initialCalendarFormat: CalendarFormat.week,

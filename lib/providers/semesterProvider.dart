@@ -9,6 +9,7 @@ class SemesterProvider extends ChangeNotifier {
   String detailTime;
 
   Future<List<SemesterObject>> getSemesterDetail() async {
+    semesterDetails.clear();
     QuerySnapshot seminarData = await FirebaseFirestore.instance
         .collection("tbl_semester")
         .orderBy("id")

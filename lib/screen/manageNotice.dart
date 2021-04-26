@@ -4,7 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:college_management_system/objects/noticeObject.dart';
-import 'homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,7 +20,7 @@ class _AdminNoticeState extends State<AdminNotice> {
   void navigateToPage(BuildContext context) async {
     noticeAll.clear();
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .pop();
   }
 
   File file1;
@@ -96,6 +95,7 @@ noticeAll.clear();
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -144,8 +144,10 @@ noticeAll.clear();
                                   child: Row(
                                     children: [
                                       Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          Text("Upload Date: "+
                                             epochToLocal(noticeAll[i].time),
                                             style: TextStyle(
                                               fontSize: 18,
@@ -174,7 +176,7 @@ noticeAll.clear();
                                   ),
                                 ),
                                 height:
-                                    MediaQuery.of(context).size.height * 0.09,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 width: MediaQuery.of(context).size.width * 0.01,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -262,9 +264,9 @@ noticeAll.clear();
                                         .toUtc()
                                         .millisecondsSinceEpoch;
 
-                                    // print(noticeObject.docname);
-                                    // print(noticeObject.spath);
-                                    // print(noticeObject.time);
+                                    print(noticeObject.docname);
+                                    print(noticeObject.spath);
+                                    print(noticeObject.time);
 
                                     Provider.of<NoticeProvider>(context,
                                             listen: false)

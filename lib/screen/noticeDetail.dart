@@ -3,7 +3,6 @@ import 'package:college_management_system/providers/noticeProvider.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,7 @@ class NoticeDetail extends StatefulWidget {
 class _NoticeDetailState extends State<NoticeDetail> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .pop();
   }
 
   bool _isLoading = false;
@@ -58,6 +57,7 @@ class _NoticeDetailState extends State<NoticeDetail> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             title: Text(noticeObject.docname),
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(

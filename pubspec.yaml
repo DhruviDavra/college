@@ -52,6 +52,7 @@ dependencies:
   connectivity: ^0.4.8+2 
   carousel_slider: ^0.0.3
   flutter_spinkit: ^4.1.2
+  lazy_load_scrollview: ^0.0.1
   
 
 dev_dependencies:

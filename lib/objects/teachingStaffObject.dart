@@ -19,7 +19,7 @@ class TeachingStaffObject {
 
     String email;
     List<dynamic> qualification;
-    String experience;
+    int experience;
     String designation;
     String specialinterest;
 

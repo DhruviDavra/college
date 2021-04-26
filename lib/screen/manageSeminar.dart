@@ -1,7 +1,6 @@
 import 'package:college_management_system/objects/seminarObject.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'homeScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/seminarProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,15 +12,16 @@ class Seminar extends StatefulWidget {
 }
 
 class _SeminarState extends State<Seminar> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
   void navigateToPage(BuildContext context) async {
     semester.clear();
     seminarAll.clear();
-    Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pop();
   }
 
   bool _isLoading = false;
-
+  bool _isEdit = false;
   String time;
   SeminarObject seminarObject = SeminarObject();
   TextEditingController topicCon = TextEditingController();
@@ -95,6 +95,7 @@ class _SeminarState extends State<Seminar> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -105,72 +106,79 @@ class _SeminarState extends State<Seminar> {
             title: Text('Seminars'),
           ),
           body: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    child: _isLoading
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.4,
-                              ),
-                              SpinKitChasingDots(
-                                color: Colors.blueGrey,
-                              ),
-                            ],
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: seminarAll.length,
-                            itemBuilder: (context, i) => Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                child: InkWell(
-                                  onTap: () {
-                                    Provider.of<SeminarProvider>(context,
-                                            listen: false)
-                                        .detailTime = seminarAll[i].time;
+            child: Form(
+              key: _key,
+              // ignore: deprecated_member_use
+              autovalidate: true,
+              child: Container(
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      child: _isLoading
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                ),
+                                SpinKitChasingDots(
+                                  color: Colors.blueGrey,
+                                ),
+                              ],
+                            )
+                          : ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: seminarAll.length,
+                              itemBuilder: (context, i) => Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Provider.of<SeminarProvider>(context,
+                                              listen: false)
+                                          .detailTime = seminarAll[i].time;
 
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SeminarDetail()));
-                                  },
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SeminarDetail()));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.01,
+                                        ),
+                                        Text(seminarAll[i].topic),
+                                        Spacer(),
+                                        editDeleteButton(i),
+                                      ],
+                                    ),
+                                  ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.07,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(0.0, 1.0), //(x,y)
+                                        blurRadius: 6.0,
                                       ),
-                                      Text(seminarAll[i].topic),
-                                      Spacer(),
-                                      editDeleteButton(i),
                                     ],
                                   ),
                                 ),
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                width: MediaQuery.of(context).size.width * 0.01,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey,
-                                      offset: Offset(0.0, 1.0), //(x,y)
-                                      blurRadius: 6.0,
-                                    ),
-                                  ],
-                                ),
                               ),
                             ),
-                          ),
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -188,7 +196,7 @@ class _SeminarState extends State<Seminar> {
               this.organizerCon.clear();
               this.speakerCon.clear();
               this.dateCon.clear();
-
+              _isEdit = false;
               addSeminar(context);
             },
           ),
@@ -202,6 +210,8 @@ class _SeminarState extends State<Seminar> {
       children: [
         InkWell(
           onTap: () {
+            _isEdit = true;
+
             topicCon.text = seminarAll[i].topic;
             desCon.text = seminarAll[i].des;
             dateCon.text = seminarAll[i].date;
@@ -293,7 +303,7 @@ class _SeminarState extends State<Seminar> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
+                TextFormField(
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -302,6 +312,12 @@ class _SeminarState extends State<Seminar> {
                     hintText: "Enter the Seminar Topic",
                   ),
                   controller: topicCon,
+                  // ignore: missing_return
+                  validator: (String value) {
+                    if (value == null || value.isEmpty) {
+                      return "Seminar Topic is Required";
+                    }
+                  },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -386,18 +402,21 @@ class _SeminarState extends State<Seminar> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Select the Date",
-                  ),
-                  controller: dateCon,
+                InkWell(
                   onTap: () {
                     selectDate(context);
                   },
+                  child: TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Select the Date",
+                    ),
+                    controller: dateCon,
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -411,16 +430,7 @@ class _SeminarState extends State<Seminar> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Select the Time",
-                  ),
-                  controller: timeCon,
+                InkWell(
                   onTap: () async {
                     var time = await showTimePicker(
                       initialTime: TimeOfDay.now(),
@@ -428,6 +438,18 @@ class _SeminarState extends State<Seminar> {
                     );
                     timeCon.text = time.format(context);
                   },
+                  child: TextField(
+                    enabled: false,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Select the Time",
+                    ),
+                    controller: timeCon,
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -492,18 +514,12 @@ class _SeminarState extends State<Seminar> {
                           seminarObject.sem = selectedSem;
                           seminarObject.date = dateCon.text;
                           seminarObject.seminarTime = timeCon.text;
-
+                          seminarObject.time = DateTime.now()
+                              .toUtc()
+                              .millisecondsSinceEpoch
+                              .toString();
                           seminarObject.organizer = organizerCon.text;
                           seminarObject.speaker = speakerCon.text;
-                          // print(seminarObject.topic);
-                          // print(seminarObject.des);
-                          // print(seminarObject.sem);
-                          // print(seminarObject.date);
-                          // print(seminarObject.seminarTime);
-                          // print(seminarObject.time);
-                          // print(seminarObject.organizer);
-                          // print(seminarObject.speaker);
-                          // print(seminarObject.sem);
 
                           Provider.of<SeminarProvider>(context, listen: false)
                               .addSeminar(seminarObject);
@@ -540,7 +556,7 @@ class _SeminarState extends State<Seminar> {
                         }
                       },
                       child: Text(
-                        "Add Seminar",
+                        _isEdit ? "Edit Seminar" : "Add Seminar",
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),

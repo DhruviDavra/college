@@ -1,7 +1,6 @@
 import 'package:college_management_system/objects/feedbackObject.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/feedbackProvider.dart';
@@ -14,11 +13,11 @@ class FeedbackDetail extends StatefulWidget {
 class _FeedbackDetailState extends State<FeedbackDetail> {
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
-        .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
+        .pop();
   }
 
   FeedbackObject feedbackObject = FeedbackObject();
-  String email;
+  String uploadtime;
   String time;
   bool _isLoading = false;
   bool _isStudent = false;
@@ -36,9 +35,10 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
       });
     _isStudent =
         Provider.of<FeedbackProvider>(context, listen: false).isStudent;
-    email = Provider.of<FeedbackProvider>(context, listen: false).email;
+    uploadtime = Provider.of<FeedbackProvider>(context, listen: false).uploadtime;
 
     time = Provider.of<FeedbackProvider>(context, listen: false).time;
+    
     // print(email);
 
     if (_isStudent == true) {
@@ -48,7 +48,7 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
     } else {
       feedbackObject =
           await Provider.of<FeedbackProvider>(context, listen: false)
-              .getParticularfeedback(email);
+              .getParticularfeedback(uploadtime);
     }
 
     if (mounted)
@@ -67,6 +67,7 @@ class _FeedbackDetailState extends State<FeedbackDetail> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             title: Text("Feedback Detail"),
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(

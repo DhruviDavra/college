@@ -19,33 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   String utype;
-//  fetchutypeFromSP() async {
-//     print('called');
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     utype = prefs.getString('utype') ?? '';
-
-//      await checkPlatform();
-//   }
-
-//    checkPlatform() {
-//      print(utype);
-//     if (utype == "Admin") {
-//       Navigator.of(context)
-//           .push(MaterialPageRoute(builder: (context) => AdminHome()));
-//     }
-//     if (utype == "TeachingStaff") {
-//       Navigator.of(context)
-//           .push(MaterialPageRoute(builder: (context) => TeachingHome()));
-//     }
-//     if (utype == "NonTeachingStaff") {
-//       Navigator.of(context)
-//           .push(MaterialPageRoute(builder: (context) => NonTeachingHome()));
-//     }
-//     if (utype == "Student") {
-//       Navigator.of(context)
-//           .push(MaterialPageRoute(builder: (context) => StudentHome()));
-//     }
-//   }
 
   bool _forgotPressed = false;
   TextEditingController emailCon = TextEditingController();
@@ -62,17 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _key,
-      //autovalidateMode: _validate,
-      child: SafeArea(
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Scaffold(
-            body: SingleChildScrollView(
+    return SafeArea(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Form(
+              key: _key,
+              // ignore: deprecated_member_use
+              autovalidate: true,
               child: Column(
                 children: [
                   SizedBox(
@@ -122,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             hintText: "Enter Email Address",
                           ),
                           controller: emailCon,
+                          validator: emailValidator,
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.02,
@@ -157,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             hintText: "Enter Password",
                           ),
                           controller: pwdCon,
+                          validator: _passwordValidator,
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.02,
@@ -223,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         MaterialPageRoute(
                                             builder: (context) => AdminHome()));
                                   }
-                                  if (utype == "TeachingStaff") {
+                                  if (utype == "Teaching Staff") {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -236,7 +212,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 NonTeachingHome()));
                                   }
                                   if (utype == "Student") {
-                                    Provider.of<StudentProvider>(context,listen: false)
+                                    Provider.of<StudentProvider>(context,
+                                            listen: false)
                                         .profileEmail = emailCon.text;
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -289,5 +266,30 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (value.length == 0) {
+      return "Email is Required";
+    }
+    if (!regex.hasMatch(value)) {
+      return 'Email format is invalid';
+    } else {
+      return null;
+    }
+  }
+
+  String _passwordValidator(String value) {
+  //  Pattern pattern = r'^(?=.?[a-z])(?=.?[0-9]).{8,}$';
+  //  RegExp regex = new RegExp(pattern);
+    print(value);
+    if (value.isEmpty) {
+      return 'Please enter password';
+    } else {
+      return null;
+    }
   }
 }
