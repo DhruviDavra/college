@@ -21,6 +21,7 @@ class AttendanceObject {
     int subCode;
     String status;
 
+
     factory AttendanceObject.fromJson(Map<String, dynamic> json) => AttendanceObject(
         email:  List<String>.from(json["email"].map((x) => x)),
         date: json["date"],

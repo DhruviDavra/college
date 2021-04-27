@@ -16,6 +16,7 @@ import 'package:college_management_system/providers/userProvider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'studentAssignment.dart';
+import 'studentAttendance.dart';
 import 'studentEbook.dart';
 import 'studentSyllabus.dart';
 
@@ -774,7 +775,8 @@ class _StudentHomeState extends State<StudentHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentAttendance()));
             },
           ),
           ListTile(

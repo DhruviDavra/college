@@ -10,6 +10,7 @@ import './providers/userProvider.dart';
 import './providers/teachingStaffProvider.dart';
 import 'providers/nonTeachingStaffProvider.dart';
 import 'providers/seminarProvider.dart';
+import 'providers/assignmentSubmissionProvider.dart';
 import 'package:college_management_system/providers/semesterProvider.dart';
 import 'package:college_management_system/providers/studentProvider.dart';
 import 'package:college_management_system/providers/attendanceProvider.dart';
@@ -41,9 +42,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<TeachingStaffProvider>(
           create: (_) => TeachingStaffProvider(),
         ),
-         ChangeNotifierProvider<NonTeachingStaffProvider>(
-          create: (_) => NonTeachingStaffProvider(),
-        ),
         ChangeNotifierProvider<SeminarProvider>(
           create: (_) => SeminarProvider(),
         ),
@@ -71,14 +69,20 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<SyllabusProvider>(
           create: (_) => SyllabusProvider(),
         ),
-         ChangeNotifierProvider<AssignmentProvider>(
+        ChangeNotifierProvider<AssignmentProvider>(
           create: (_) => AssignmentProvider(),
         ),
-          ChangeNotifierProvider<BookProvider>(
+        ChangeNotifierProvider<BookProvider>(
           create: (_) => BookProvider(),
         ),
-         ChangeNotifierProvider<ExamProvider>(
+        ChangeNotifierProvider<ExamProvider>(
           create: (_) => ExamProvider(),
+        ),
+        ChangeNotifierProvider<NonStaffProvider>(
+         create: (_) => NonStaffProvider(),
+        ),
+          ChangeNotifierProvider<AssignmentSubmissionProvider>(
+          create: (_) => AssignmentSubmissionProvider(),
         ),
       ],
       child: MaterialApp(

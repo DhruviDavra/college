@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:college_management_system/objects/nonteachingStaffObject.dart';
 
-class NonTeachingStaffProvider extends ChangeNotifier {
+class NonStaffProvider with ChangeNotifier {
   static createNonTeachingStaffTable() {
     FirebaseFirestore.instance.collection("tbl_NonTeachingStaff");
   }
@@ -28,13 +28,14 @@ class NonTeachingStaffProvider extends ChangeNotifier {
 
   Future<List<NonTeachingStaffObject>> getTeachingDetail() async {
     teachingDetails.clear();
-    QuerySnapshot teachingData =
-        await FirebaseFirestore.instance.collection("tbl_NonTeachingStaff").get();
+    QuerySnapshot teachingData = await FirebaseFirestore.instance
+        .collection("tbl_NonTeachingStaff")
+        .get();
     for (int i = 0; i < teachingData.docs.length; i++) {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("tbl_NonTeachingStaff")
           .where("email", isEqualTo: teachingData.docs[i].data()["email"])
-          .orderBy("experience",descending: true)
+          .orderBy("experience", descending: true)
           .get();
 
       teachingDetails.add(nonTeachingStaffObjectFromJson(
@@ -48,7 +49,7 @@ class NonTeachingStaffProvider extends ChangeNotifier {
     userDetails.clear();
     QuerySnapshot teachingData = await FirebaseFirestore.instance
         .collection("tbl_NonTeachingStaff")
-        .orderBy("experience",descending: true)
+        .orderBy("experience", descending: true)
         .get();
 
     for (int i = 0; i < teachingData.docs.length; i++) {
@@ -145,6 +146,4 @@ class NonTeachingStaffProvider extends ChangeNotifier {
         .get();
     return userInfoObjFromJson(json.encode(querySnapshot.docs.first.data()));
   }
-
- 
 }

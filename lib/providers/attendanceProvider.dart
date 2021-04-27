@@ -9,9 +9,12 @@ class AttendanceProvider extends ChangeNotifier {
   }
 
   List<AttendanceObject> attendanceDetails = [];
+   List<AttendanceObject> particularDate = [];
   String detailTime;
   String selectedSem;
   int selectedSub;
+  String date;
+  String studentEmail;
 
   addAttendance(AttendanceObject attendanceObject) {
     createAttendanceTable();
@@ -23,30 +26,31 @@ class AttendanceProvider extends ChangeNotifier {
     });
   }
 
-  Future<List<AttendanceObject>> getSeminarDetail() async {
-    attendanceDetails.clear();
-    QuerySnapshot seminarData =
-        await FirebaseFirestore.instance.collection("tbl_attendance").get();
-    for (int i = 0; i < seminarData.docs.length; i++) {
-      print(seminarData.docs[0].data()["topic"]);
-      attendanceDetails.add(
-          attendanceObjectFromJson(json.encode(seminarData.docs[i].data())));
+ Future<List<AttendanceObject>> findAttendance(String date) async {
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("tbl_attendance")
+        .where("time", isEqualTo: date)
+        .get();
+    for (int i = 0; i < data.docs.length; i++) {
+      // print(seminarData.docs[i].data()["email"]);
+      particularDate
+          .add(attendanceObjectFromJson(json.encode(data.docs[i].data())));
     } //for
-    return attendanceDetails;
+    return particularDate;
   }
 
-  updateAttendance(String time, AttendanceObject seminarObject) async {
-    QuerySnapshot seminarQuery = await FirebaseFirestore.instance
+   Future<List<AttendanceObject>> allFeedback() async {
+     particularDate.clear();
+    QuerySnapshot feedbackData = await FirebaseFirestore.instance
         .collection("tbl_attendance")
-        .where("time", isEqualTo: time)
+        .orderBy("time")
         .get();
-    seminarQuery.docs.forEach(
-      (element) async {
-        await FirebaseFirestore.instance
-            .collection("tbl_attendance")
-            .doc(element.id)
-            .update(seminarObject.toJson());
-      },
-    );
+    for (int i = 0; i < feedbackData.docs.length; i++) {
+       particularDate
+          .add(attendanceObjectFromJson(json.encode(feedbackData.docs[i].data())));
+    } //for
+    return particularDate;
   }
+
+
 }
