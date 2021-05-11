@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             builder: (context) =>
                                                 TeachingHome()));
                                   }
-                                  if (utype == "NonTeachingFaculty") {
+                                  if (utype == "Non-Teaching Staff") {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -283,8 +283,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String _passwordValidator(String value) {
-  //  Pattern pattern = r'^(?=.?[a-z])(?=.?[0-9]).{8,}$';
-  //  RegExp regex = new RegExp(pattern);
     print(value);
     if (value.isEmpty) {
       return 'Please enter password';

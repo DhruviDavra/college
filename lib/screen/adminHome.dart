@@ -23,6 +23,7 @@ import 'manageFeedback.dart';
 import 'manageAdminLeave.dart';
 import 'manageStudentHome.dart';
 import 'manageSemester.dart';
+import 'reports.dart';
 
 class AdminHome extends StatefulWidget {
   @override
@@ -913,22 +914,22 @@ class _AdminHomeState extends State<AdminHome> {
               ));
             },
           ),
-           ListTile(
-            leading: Icon(
-              Icons.people,
-            ),
-            title: Text(
-              'Non-Teaching Staff',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NonStaff(),
-              ));
-            },
-          ),
+          //  ListTile(
+          //   leading: Icon(
+          //     Icons.people,
+          //   ),
+          //   title: Text(
+          //     'Non-Teaching Staff',
+          //     style: TextStyle(
+          //       fontSize: 16,
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     Navigator.of(context).push(MaterialPageRoute(
+          //       builder: (context) => NonStaff(),
+          //     ));
+          //   },
+          // ),
           ListTile(
             leading: Icon(
               Icons.people,
@@ -1031,7 +1032,8 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Reports()));
             },
           ),
           ListTile(

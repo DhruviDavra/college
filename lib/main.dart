@@ -1,4 +1,5 @@
 import 'package:college_management_system/providers/examProvider.dart';
+import 'package:college_management_system/providers/feeProvider.dart';
 import 'package:college_management_system/providers/feedbackProvider.dart';
 import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/providers/noticeProvider.dart';
@@ -18,6 +19,7 @@ import 'package:college_management_system/providers/subjectProvider.dart';
 import 'package:college_management_system/providers/syllabusProvider.dart';
 import 'package:college_management_system/providers/assignmentProvider.dart';
 import 'providers/bookProvider.dart';
+import 'providers/circularProvider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +85,12 @@ class _MyAppState extends State<MyApp> {
         ),
           ChangeNotifierProvider<AssignmentSubmissionProvider>(
           create: (_) => AssignmentSubmissionProvider(),
+        ),
+           ChangeNotifierProvider<CircularProvider>(
+          create: (_) => CircularProvider(),
+        ),
+           ChangeNotifierProvider<FeeProvider>(
+          create: (_) => FeeProvider(),
         ),
       ],
       child: MaterialApp(

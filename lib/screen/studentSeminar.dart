@@ -95,6 +95,7 @@ class _StudentSeminarState extends State<StudentSeminar> {
         },
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

@@ -18,9 +18,11 @@ class _ContactUsState extends State<ContactUs> {
       await canLaunch("https://www.facebook.com/tmtbcacollege/")
           ? await launch("https://www.facebook.com/tmtbcacollege/")
           : throw 'Could not launch ';
+
   void _insta() async => await canLaunch("https://www.instagram.com/_tmtians_/")
       ? await launch("https://www.instagram.com/_tmtians_/")
       : throw 'Could not launch ';
+      
   void _mail() async => await canLaunch(
           "http://tmtbcasurat.org/New%20Template/new_guest/index.html")
       ? await launch(

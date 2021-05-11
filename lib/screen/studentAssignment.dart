@@ -28,7 +28,8 @@ class _StudentAssignmentState extends State<StudentAssignment> {
 
   File file1;
   AssignmentObject assignmentObject = AssignmentObject();
-  AssignmentSubmissionObject assignmentSubmissionObject =AssignmentSubmissionObject();
+  AssignmentSubmissionObject assignmentSubmissionObject =
+      AssignmentSubmissionObject();
   String filename;
   String filepath;
   String dateFromInt;
@@ -173,6 +174,30 @@ class _StudentAssignmentState extends State<StudentAssignment> {
                                           ),
                                           color: Colors.white,
                                           onPressed: () async {
+                                            assignmentSubmissionObject.title =
+                                                noticeAll[i].title;
+                                            assignmentSubmissionObject.subject =
+                                                noticeAll[i].subject;
+                                            assignmentSubmissionObject.sem =
+                                                noticeAll[i].sem;
+                                            assignmentSubmissionObject.email =
+                                                Provider.of<StudentProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .profileEmail;
+
+                                            print("Assignment title: " +
+                                                assignmentSubmissionObject
+                                                    .title);
+                                            print("subject: " +
+                                                assignmentSubmissionObject
+                                                    .subject);
+                                            print("sem: " +
+                                                assignmentSubmissionObject.sem);
+                                            print("email: " +
+                                                assignmentSubmissionObject
+                                                    .email);
+
                                             showModalBottomSheet<void>(
                                                 context: context,
                                                 builder:
@@ -195,7 +220,6 @@ class _StudentAssignmentState extends State<StudentAssignment> {
                                                           Text(
                                                             "Upload Assignment PDF Here",
                                                             style: TextStyle(
-                           
                                                                 fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
@@ -262,30 +286,43 @@ class _StudentAssignmentState extends State<StudentAssignment> {
                                                                   .blueGrey,
                                                               onPressed:
                                                                   () async {
-                                                                filepath = await Provider.of<AssignmentSubmissionProvider>(
+                                                                filepath = await Provider.of<
+                                                                            AssignmentSubmissionProvider>(
                                                                         context,
-                                                                        listen: false)
-                                                                    .uploadFile(filename, file1);
+                                                                        listen:
+                                                                            false)
+                                                                    .uploadFile(
+                                                                        filename,
+                                                                        file1);
 
-                                                            print(Provider.of<StudentProvider>(context,listen: false).profileEmail);
-                                                                // if (filepath != null) {
-                                                                //   noticeObject.docname = filename;
-                                                                //   noticeObject.spath = filepath;
+                                                                if (filepath !=
+                                                                    null) {
+                                                                  assignmentSubmissionObject
+                                                                          .path =
+                                                                      filepath;
+                                                                  assignmentSubmissionObject
+                                                                      .time = DateTime
+                                                                          .now()
+                                                                      .toUtc()
+                                                                      .millisecondsSinceEpoch;
 
-                                                                //   noticeObject.time = DateTime.now()
-                                                                //       .toUtc()
-                                                                //       .millisecondsSinceEpoch;
+                                                                  print(assignmentSubmissionObject
+                                                                      .email);
+                                                                  print(
+                                                                      assignmentSubmissionObject
+                                                                          .time);
 
-                                                                //   print(noticeObject.docname);
-                                                                //   print(noticeObject.spath);
-                                                                //   print(noticeObject.time);
-
-                                                                //   Provider.of<NoticeProvider>(context,
-                                                                //           listen: false)
-                                                                //       .addNotice(noticeObject);
-                                                                //   Navigator.of(context).pop();
-                                                                //   fetchData();
-                                                                // }
+                                                                  Provider.of<AssignmentSubmissionProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .addAssignment(
+                                                                          assignmentSubmissionObject);
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  fetchData();
+                                                                }
                                                               },
                                                               child: Text(
                                                                 "Upload Document",

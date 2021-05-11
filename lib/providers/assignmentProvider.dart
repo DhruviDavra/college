@@ -13,6 +13,7 @@ class AssignmentProvider extends ChangeNotifier {
 
   List<AssignmentObject> assignmentDetail = [];
   String detailTime;
+
   AssignmentObject particularAssignment = AssignmentObject();
 
   addAssignment(AssignmentObject assignmentObject) {
@@ -23,7 +24,7 @@ class AssignmentProvider extends ChangeNotifier {
       "docname": assignmentObject.docname,
       "path": assignmentObject.path,
       "sem": assignmentObject.sem,
-      "Subject": assignmentObject.subject,
+      "subject": assignmentObject.subject,
       "des":assignmentObject.des,
       "asno":assignmentObject.asno,
     });
@@ -34,7 +35,7 @@ class AssignmentProvider extends ChangeNotifier {
     QuerySnapshot data =
         await FirebaseFirestore.instance.collection("tbl_assignment").get();
     for (int i = 0; i < data.docs.length; i++) {
-      //  print(noticeData.docs[0].data()["docname"]);
+        print(data.docs[0].data()["subject"]);
       assignmentDetail.add(
           assignmentObjectFromJson(json.encode(data.docs[i].data())));
     } //for

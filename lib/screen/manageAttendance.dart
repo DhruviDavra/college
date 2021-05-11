@@ -22,7 +22,7 @@ class _AttendenceState extends State<Attendence> {
 
   List<Checkbox> checkList = [];
   static int _count = 0;
-  final List<bool> _checks = List.generate(_count, (_) => false);
+   List<bool> _checks = [];
   List<int> rno = [];
   String selectedSem;
   String div;
@@ -33,29 +33,41 @@ class _AttendenceState extends State<Attendence> {
   AttendanceObject attendanceObject = AttendanceObject();
 
   getData() async {
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-    selectedSem =
-        Provider.of<AttendanceProvider>(context, listen: false).selectedSem;
+    try {
+      if (mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
+      selectedSem =
+          Provider.of<AttendanceProvider>(context, listen: false).selectedSem;
 
-    div = Provider.of<StudentProvider>(context, listen: false).div;
+      div = Provider.of<StudentProvider>(context, listen: false).div;
 
-    subject =
-        Provider.of<AttendanceProvider>(context, listen: false).selectedSub;
+      subject =
+          Provider.of<AttendanceProvider>(context, listen: false).selectedSub;
 
-    _count = await Provider.of<StudentProvider>(context, listen: false)
-        .studentSemesterWise();
-    print(_count);
-    for (int i = 0; i < _count; i++) {
-      rno.add(i + 1);
-    }
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
+      _count = await Provider.of<StudentProvider>(context, listen: false)
+          .studentSemesterWise();
+_checks= List.generate(_count, (_) => false);
+
+      print(_count);
+      for (int i = 0; i < _count; i++) {
+        rno.add(i + 1);
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print(e);
+       if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -114,7 +126,7 @@ class _AttendenceState extends State<Attendence> {
                   fontSize: 18,
                 ),
               ),
-              _isLoading
+              _isLoading 
                   ? Column(
                       children: [
                         SizedBox(
@@ -190,7 +202,6 @@ class _AttendenceState extends State<Attendence> {
 
                     Provider.of<AttendanceProvider>(context, listen: false)
                         .addAttendance(attendanceObject);
-                        
                   },
                   child: Text(
                     "Submit",

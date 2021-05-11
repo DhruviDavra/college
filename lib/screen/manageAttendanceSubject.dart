@@ -21,7 +21,7 @@ class _AttendanceSubState extends State<AttendanceSub> {
   }
 
   bool _isLoading = false;
-
+  String sem;
   List<SubjectObject> subject = [];
 
   @override
@@ -37,9 +37,10 @@ class _AttendanceSubState extends State<AttendanceSub> {
       setState(() {
         _isLoading = true;
       });
+    sem = Provider.of<AttendanceProvider>(context, listen: false).selectedSem;
     subject.clear();
     subject = await Provider.of<SubjectProvider>(context, listen: false)
-        .getSubjectDetail();
+        .getSubjectDetailSemWise(sem);
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -98,16 +99,15 @@ class _AttendanceSubState extends State<AttendanceSub> {
                                   child: InkWell(
                                     onTap: () {
                                       Provider.of<AttendanceProvider>(context,
-                                                  listen: false)
-                                              .selectedSub =
-                                          subject[i].subCode;
+                                              listen: false)
+                                          .selectedSub = subject[i].subCode;
                                       print(subject[i].subCode);
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   Attendence()));
                                     },
-                                    child: Row(
+                                   child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [

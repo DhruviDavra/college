@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'manageStudentA.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:college_management_system/objects/usersObject.dart';
 import 'package:college_management_system/providers/userProvider.dart';
@@ -10,12 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
+import 'manageStudentA.dart';
+
 class StudentB extends StatefulWidget {
   @override
   _StudentBState createState() => _StudentBState();
 }
 
 class _StudentBState extends State<StudentB> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   bool _isEdit = false;
   String radioItem = '';
   bool _isLoading = false;
@@ -41,8 +46,7 @@ class _StudentBState extends State<StudentB> {
     userOfA.clear();
 
     studentOfA.clear();
-    Navigator.of(context)
-        .pop();
+    Navigator.of(context).pop();
   }
 
   var scrollController = ScrollController();
@@ -172,7 +176,7 @@ class _StudentBState extends State<StudentB> {
                             topLeft: Radius.circular(20),
                           ),
                         ),
-                        color: Colors.blueGrey[700],
+                        color: Colors.blueGrey,
                         child: Text(
                           "Div A",
                           style: TextStyle(
@@ -197,7 +201,7 @@ class _StudentBState extends State<StudentB> {
                             topLeft: Radius.circular(20),
                           ),
                         ),
-                        color: Colors.blueGrey,
+                        color: Colors.blueGrey[700],
                         child: Text(
                           "Div B",
                           style: TextStyle(
@@ -218,7 +222,7 @@ class _StudentBState extends State<StudentB> {
               Column(
                 children: [
                   Center(
-                    child: stdobjA.length != 0
+                    child: stdobjA?.isNotEmpty ?? false
                         ? RefreshIndicator(
                             child: SizedBox(
                               height: MediaQuery.of(context).size.height * 0.79,
@@ -242,70 +246,70 @@ class _StudentBState extends State<StudentB> {
                                                   StudentDetail()));
                                     },
                                     child: Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Roll No. " +
-                                                          stdobjA[index]
-                                                              .rno
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
-                                                    Spacer(),
-                                                    editDeleteButton(index),
-                                                  ],
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Roll No. " +
+                                                    stdobjA[index]
+                                                        .rno
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16,
                                                 ),
-                                                SizedBox(height: 8),
-                                                Text(
-                                                  "Name: " +
-                                                      stdobjA[index].name,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Text(
-                                                  "Email: " +
-                                                      stdobjA[index].email,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.13,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.01,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey,
-                                                  offset:
-                                                      Offset(0.0, 1.0), //(x,y)
-                                                  blurRadius: 6.0,
-                                                ),
-                                              ],
+                                              ),
+                                              Spacer(),
+                                              editDeleteButton(index),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            "Name: " +
+                                                ((stdobjA[index]
+                                                            ?.name
+                                                            ?.isEmpty ??
+                                                        true)
+                                                    ? ""
+                                                    : stdobjA[index].name),
+                                            style: TextStyle(
+                                              fontSize: 16,
                                             ),
                                           ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            "Email: " + stdobjA[index].email,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.13,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.01,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            offset: Offset(0.0, 1.0), //(x,y)
+                                            blurRadius: 6.0,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -438,414 +442,488 @@ class _StudentBState extends State<StudentB> {
         return SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    ' Student Details',
+            child: Form(
+              key: _key,
+              autovalidateMode: autovalidateMode,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      ' Student Details',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  Text(
+                    "  First Name",
                     style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Text(
-                  "  First Name",
-                  style: TextStyle(
-                    fontSize: 18,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter the First Name",
-                  ),
-                  controller: fnameCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Middle Name",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter the Middle Name",
-                  ),
-                  controller: mnameCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Text(
-                  "  Last Name",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter the Last Name",
-                  ),
-                  controller: lnameCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Date of Birth",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                InkWell(
-                  onTap: () {
-                    selectDate(context);
-                  },
-                  child: TextField(
-                    enabled: false,
+                  TextFormField(
                     decoration: InputDecoration(
                       border: new OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(25.0),
                         borderSide: new BorderSide(),
                       ),
-                      hintText: "Enter the Date of Birth",
+                      hintText: "Enter the First Name",
                     ),
-                    controller: dateCon,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Contact No",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter the Contact Number",
-                  ),
-                  controller: cnoCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Email Address",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  enabled: _isEdit ? false : true,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter the Proper Email Address",
-                  ),
-                  controller: emailCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Password",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  enabled: _isEdit ? false : true,
-                  obscureText: !this._showPassword,
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.remove_red_eye,
-                        color: this._showPassword ? Colors.blue : Colors.grey,
-                      ),
-                      onPressed: () {
-                        setState(
-                            () => this._showPassword = !this._showPassword);
-                      },
-                    ),
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter Your Password",
-                  ),
-                  controller: pwdCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Division",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RadioListTile(
-                        groupValue: radioItem,
-                        title: Text('Div A'),
-                        value: 'A',
-                        onChanged: (val) {
-                          setState(() {
-                            radioItem = val;
-                            print(radioItem);
-                          });
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: RadioListTile(
-                        groupValue: radioItem,
-                        title: Text('Div B'),
-                        value: 'B',
-                        onChanged: (val) {
-                          setState(() {
-                            radioItem = val;
-                            print(radioItem);
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Roll Number",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter Roll Number",
-                  ),
-                  controller: rnoCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Enrollment Number",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    hintText: "Enter Enrollment Number",
-                  ),
-                  controller: ernoCon,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                Text(
-                  "  Academic Year",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: DropdownButton<String>(
-                    hint: Text("Academic Year"),
-                    value: selectedYear,
-                    items: yearList.map((int value) {
-                      return DropdownMenuItem<String>(
-                        value: value.toString(),
-                        child: Center(child: Text(value.toString())),
-                      );
-                    }).toList(),
-                    onChanged: (String value) {
-                      if (mounted) {
-                        setState(() {
-                          selectedYear = value;
-                        });
+                    controller: fnameCon,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter First Name';
                       }
+                      return null;
                     },
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                Center(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Middle Name",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
                       ),
-                      color: Colors.blueGrey,
-                      onPressed: () async {
-                        try {
-                          print(fnameCon.text);
-                          print(mnameCon.text);
-                          print(lnameCon.text);
-                          print(dateCon.text);
-                          print(cnoCon.text);
-                          print(emailCon.text);
-                          print(pwdCon.text);
-                          print(selectedDiv);
-                          print(rnoCon.text);
-                          print(ernoCon);
-                          print(selectedYear);
-
-                          userInfoObj.email = emailCon.text;
-                          userInfoObj.password = pwdCon.text;
-                          userInfoObj.fname = fnameCon.text;
-                          userInfoObj.mname = mnameCon.text;
-                          userInfoObj.lname = lnameCon.text;
-                          userInfoObj.dob = dateCon.text;
-                          userInfoObj.cno = cnoCon.text;
-                          userInfoObj.utype = "Student";
-
-                          studentObject.rno = int.parse(rnoCon.text);
-                          studentObject.enrollno = ernoCon.text;
-                          studentObject.sem = selectedSem;
-                          studentObject.div = radioItem;
-                          studentObject.acadamicYear = selectedYear;
-                          studentObject.email = emailCon.text;
-
-                          _isEdit
-                              ? await Provider.of<StudentProvider>(context,
-                                      listen: false)
-                                  .update(
-                                      emailCon.text, userInfoObj, studentObject)
-                              : await insert();
-
+                      hintText: "Enter the Middle Name",
+                    ),
+                    controller: mnameCon,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter Middle Name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  Text(
+                    "  Last Name",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Enter the Last Name",
+                    ),
+                    controller: lnameCon,
+                     validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter Last Name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Date of Birth",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      selectDate(context);
+                    },
+                    child: TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        hintText: "Enter the Date of Birth",
+                      ),
+                      controller: dateCon,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Contact No",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Enter the Contact Number",
+                    ),
+                    controller: cnoCon,
+                     validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter Contact Number';
+                      }
+                      if(value.length!=10){
+                        return 'Contact Number should be of 10 digits';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Email Address",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    enabled: _isEdit ? false : true,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Enter the Proper Email Address",
+                    ),
+                    controller: emailCon,
+                     validator: emailValidator,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Password",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    enabled: _isEdit ? false : true,
+                    obscureText: !this._showPassword,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          Icons.remove_red_eye,
+                          color: this._showPassword ? Colors.blue : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(
+                              () => this._showPassword = !this._showPassword);
+                        },
+                      ),
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Enter Your Password",
+                    ),
+                    controller: pwdCon,
+                     validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter Password';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Division",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          groupValue: radioItem,
+                          title: Text('Div A'),
+                          value: 'A',
+                          onChanged: (val) {
+                            setState(() {
+                              radioItem = val;
+                              print(radioItem);
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          groupValue: radioItem,
+                          title: Text('Div B'),
+                          value: 'B',
+                          onChanged: (val) {
+                            setState(() {
+                              radioItem = val;
+                              print(radioItem);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Roll Number",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Enter Roll Number",
+                    ),
+                    controller: rnoCon,
+                     validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter Roll Number';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Enrollment Number",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      hintText: "Enter Enrollment Number",
+                    ),
+                    controller: ernoCon,
+                     validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter Enrollment Number';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                  Text(
+                    "  Academic Year",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: DropdownButton<String>(
+                      hint: Text("Academic Year"),
+                      value: selectedYear,
+                      items: yearList.map((int value) {
+                        return DropdownMenuItem<String>(
+                          value: value.toString(),
+                          child: Center(child: Text(value.toString())),
+                        );
+                      }).toList(),
+                      onChanged: (String value) {
+                        if (mounted) {
                           setState(() {
-                            userOfA.clear();
-                            studentOfA.clear();
+                            selectedYear = value;
                           });
-                          Navigator.of(context).pop();
-                          this.fnameCon.clear();
-                          this.mnameCon.clear();
-                          this.lnameCon.clear();
-                          this.dateCon.clear();
-                          this.cnoCon.clear();
-                          this.emailCon.clear();
-                          this.pwdCon.clear();
-                          this.rnoCon.clear();
-                          this.ernoCon.clear();
-                          this.ayearCon.clear();
-                        } catch (e) {
-                          print(e.toString());
-                          return showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: Text("Alert!"),
-                              content: Text(e.toString()),
-                              actions: <Widget>[
-                                FlatButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop();
-                                  },
-                                  child: Text("Ok"),
-                                ),
-                              ],
-                            ),
-                          );
                         }
                       },
-                      child: Text(
-                        _isEdit ? "Edit Student" : "Add Student",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                  Center(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        color: Colors.blueGrey,
+                        onPressed: () async {
+                          if (!_key.currentState.validate()) {
+                            if (mounted) {
+                              setState(() {
+                                autovalidateMode = AutovalidateMode.always;
+                              });
+                            }
+                            return;
+                          }
+
+                          try {
+                            print(fnameCon.text);
+                            print(mnameCon.text);
+                            print(lnameCon.text);
+                            print(dateCon.text);
+                            print(cnoCon.text);
+                            print(emailCon.text);
+                            print(pwdCon.text);
+                            print(selectedDiv);
+                            print(rnoCon.text);
+                            print(ernoCon);
+                            print(selectedYear);
+
+                            userInfoObj.email = emailCon.text;
+                            userInfoObj.password = pwdCon.text;
+                            userInfoObj.fname = fnameCon.text;
+                            userInfoObj.mname = mnameCon.text;
+                            userInfoObj.lname = lnameCon.text;
+                            userInfoObj.dob = dateCon.text;
+                            userInfoObj.cno = cnoCon.text;
+                            userInfoObj.utype = "Student";
+
+                            studentObject.rno = int.parse(rnoCon.text);
+                            studentObject.enrollno = ernoCon.text;
+                            studentObject.sem = selectedSem;
+                            studentObject.div = radioItem;
+                            studentObject.acadamicYear = selectedYear;
+                            studentObject.email = emailCon.text;
+
+                            _isEdit
+                                ? await Provider.of<StudentProvider>(context,
+                                        listen: false)
+                                    .update(emailCon.text, userInfoObj,
+                                        studentObject)
+                                : await insert();
+
+                            setState(() {
+                              userOfA.clear();
+                              studentOfA.clear();
+                            });
+                            Navigator.of(context).pop();
+                            this.fnameCon.clear();
+                            this.mnameCon.clear();
+                            this.lnameCon.clear();
+                            this.dateCon.clear();
+                            this.cnoCon.clear();
+                            this.emailCon.clear();
+                            this.pwdCon.clear();
+                            this.rnoCon.clear();
+                            this.ernoCon.clear();
+                            this.ayearCon.clear();
+                          } catch (e) {
+                            print(e.toString());
+                            return showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text("Alert!"),
+                                content: Text(e.toString()),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                    child: Text("Ok"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        child: Text(
+                          _isEdit ? "Edit Student" : "Add Student",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                ),
-              ],
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                  ),
+                ],
+              ),
             ),
           ),
         );
       },
     );
   }
+
+ String emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (value.length == 0) {
+      return "Email is Required";
+    }
+    if (!regex.hasMatch(value)) {
+      return 'Email format is invalid';
+    } else {
+      return null;
+    }
+  }
+
 
   List<StudentObject> stdobjA;
   List<UserInfoObj> userObjA;
@@ -889,7 +967,9 @@ class _StudentBState extends State<StudentB> {
                     querySnapshot.docs.first.data()["fname"] +
                     " " +
                     querySnapshot.docs.first.data()["mname"];
-                stdobjA[index].name = name;
+                if (index != null) {
+                  stdobjA[index]?.name = name ?? "";
+                }
                 // userOfA.add(userInfoObjFromJson(
                 //     json.encode(querySnapshot.docs.first.data())));
               },

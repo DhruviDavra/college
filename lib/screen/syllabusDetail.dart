@@ -57,6 +57,7 @@ class _SyllabusDetailState extends State<SyllabusDetail> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             title: Text(syllabusObject.title),
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(

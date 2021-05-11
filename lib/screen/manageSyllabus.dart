@@ -19,6 +19,10 @@ class Syllabus extends StatefulWidget {
 }
 
 class _SyllabusState extends State<Syllabus> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -160,9 +164,10 @@ class _SyllabusState extends State<Syllabus> {
                                 padding: const EdgeInsets.all(7.0),
                                 child: InkWell(
                                   onTap: () {
-                                     Provider.of<SyllabusProvider>(context,
-                                            listen: false)
-                                        .particularSyllabus = syllabusDetails[i];
+                                    Provider.of<SyllabusProvider>(context,
+                                                listen: false)
+                                            .particularSyllabus =
+                                        syllabusDetails[i];
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -175,8 +180,8 @@ class _SyllabusState extends State<Syllabus> {
                                             MediaQuery.of(context).size.width *
                                                 0.01,
                                       ),
-                                      Text("Title: "+
-                                        syllabusDetails[i].title,
+                                      Text(
+                                        "Title: " + syllabusDetails[i].title,
                                         style: TextStyle(
                                           fontSize: 18,
                                         ),
@@ -219,55 +224,66 @@ class _SyllabusState extends State<Syllabus> {
                   builder: (BuildContext context) {
                     return SingleChildScrollView(
                       child: Container(
-                        margin: EdgeInsets.all(5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Syllabus Details",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.04,
-                            ),
-                            Text(
-                              "Title",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: "Enter Title",
+                        margin: EdgeInsets.all(10),
+                        child: Form(
+                          key: _key,
+                          autovalidateMode: autovalidateMode,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
-                              controller: titleCon,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Upload File Here",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                await getPdfAndUpload();
-                              },
-                              child: TextField(
+                              Text(
+                                "Syllabus Details",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                              ),
+                              Text(
+                                "Title",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(),
+                                  ),
+                                  hintText: "Enter Title",
+                                ),
+                                controller: titleCon,
+                                validator: (value){
+                                  if(value.isEmpty){
+                                    return 'Please enter Title';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                "Upload File Here",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
                                 decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
@@ -275,122 +291,146 @@ class _SyllabusState extends State<Syllabus> {
                                     borderSide: new BorderSide(),
                                   ),
                                   hintText: "Tap Here to Load PDF",
-                                  enabled: false,
-                                ),
+                                  ),
                                 controller: filenameCon,
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Semester",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: DropdownButton<String>(
-                                hint: Text("Select Semester"),
-                                value: sem,
-                                items: semesterDetail.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      sem = value;
-                                      fetchSubject();
-                                    });
-                                  }
+                                   validator: (value){
+                                if(value.isEmpty){
+                                  return 'Please Select PDF to upload';
+                                }
+                                return null;
+                              },
+                               onTap: () async {
+                                  await getPdfAndUpload();
                                 },
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Subject",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: DropdownButton<String>(
-                                hint: Text("Select Subject"),
-                                value: subject,
-                                items: subjectDetail.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      subject = value;
-                                    });
-                                  }
-                                },
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                              Text(
+                                "Semester",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Semester"),
+                                  value: sem,
+                                  items: semesterDetail.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        sem = value;
+                                        fetchSubject();
+                                      });
+                                    }
+                                  },
                                 ),
-                                color: Colors.blueGrey,
-                                onPressed: () async {
-                                  filepath =
-                                      await Provider.of<SyllabusProvider>(
-                                              context,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                "Subject",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Subject"),
+                                  value: subject,
+                                  items: subjectDetail.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        subject = value;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  color: Colors.blueGrey,
+                                  onPressed: () async {
+
+                                      if (!_key.currentState.validate()) {
+                                      if (mounted) {
+                                        setState(() {
+                                          autovalidateMode =
+                                              AutovalidateMode.always;
+                                        });
+                                      }
+                                      return;
+                                    }
+                                    filepath =
+                                        await Provider.of<SyllabusProvider>(
+                                                context,
+                                                listen: false)
+                                            .uploadFile(filename, file1);
+                                    if (filepath != null) {
+                                      syllabusObject.title = titleCon.text;
+                                      syllabusObject.subject = subject;
+                                      syllabusObject.sem = sem;
+                                      syllabusObject.docname = filenameCon.text;
+                                      syllabusObject.time = DateTime.now()
+                                          .toUtc()
+                                          .millisecondsSinceEpoch;
+                                      syllabusObject.path = filepath;
+
+                                      print(syllabusObject.title);
+                                      print(syllabusObject.subject);
+                                      print(syllabusObject.sem);
+                                      print(syllabusObject.docname);
+                                      print(syllabusObject.time);
+
+                                      Provider.of<SyllabusProvider>(context,
                                               listen: false)
-                                          .uploadFile(filename, file1);
-                                  if (filepath != null) {
-                                    syllabusObject.title = titleCon.text;
-                                    syllabusObject.subject = subject;
-                                    syllabusObject.sem = sem;
-                                    syllabusObject.docname = filenameCon.text;
-                                    syllabusObject.time = DateTime.now()
-                                        .toUtc()
-                                        .millisecondsSinceEpoch;
-                                    syllabusObject.path = filepath;
-
-                                    print(syllabusObject.title);
-                                    print(syllabusObject.subject);
-                                    print(syllabusObject.sem);
-                                    print(syllabusObject.docname);
-                                    print(syllabusObject.time);
-
-                                    Provider.of<SyllabusProvider>(context,
-                                            listen: false)
-                                        .addSyllabus(syllabusObject);
-                                    Navigator.of(context).pop();
-                                    fetchData();
-                                  }
-                                },
-                                child: Text(
-                                  "Upload Document",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
+                                          .addSyllabus(syllabusObject);
+                                      Navigator.of(context).pop();
+                                      fetchData();
+                                    }
+                                  },
+                                  child: Text(
+                                    "Upload Document",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -405,8 +445,6 @@ class _SyllabusState extends State<Syllabus> {
   Widget editDeleteButton(int i) {
     return Row(
       children: [
-       
-      
         InkWell(
           onTap: () {
             showDialog(
@@ -420,7 +458,8 @@ class _SyllabusState extends State<Syllabus> {
                             setState(() {
                               print(syllabusDetails[i].time);
                               Provider.of<SyllabusProvider>(context,
-                                      listen: false).deleteSyllabus(syllabusDetails[i]);
+                                      listen: false)
+                                  .deleteSyllabus(syllabusDetails[i]);
                               syllabusDetails.clear();
                               semester.clear();
                               setState(() {

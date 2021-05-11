@@ -71,6 +71,20 @@ class LeaveProvider extends ChangeNotifier {
     return leaveDetails;
   }
 
+  Future<List<LeaveObject>> getAllLeave() async {
+    leaveDetails.clear();
+    QuerySnapshot leaveData = await FirebaseFirestore.instance
+        .collection("tbl_leave")
+        .orderBy("email")
+        
+        .get();
+    for (int i = 0; i < leaveData.docs.length; i++) {
+      leaveDetails
+          .add(leaveObjectFromJson(json.encode(leaveData.docs[i].data())));
+    } //for
+    return leaveDetails;
+  }
+
   Future<List<StudentObject>> getStudentDetail() async {
     studentDetails.clear();
     QuerySnapshot leaveData = await FirebaseFirestore.instance
@@ -90,6 +104,18 @@ class LeaveProvider extends ChangeNotifier {
     } //for
 
     return studentDetails;
+  }
+
+  StudentObject studentObject = StudentObject();
+  Future<StudentObject> getLeaveStudent(String email) async {
+    QuerySnapshot studentData = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("email", isEqualTo: email)
+        .get();
+    studentObject =
+        (studentObjectFromJson(json.encode(studentData.docs.first.data())));
+
+    return studentObject;
   }
 
   Future<List<UserInfoObj>> getUserDetail() async {

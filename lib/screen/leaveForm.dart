@@ -32,7 +32,6 @@ class _LeaveFormState extends State<LeaveForm> {
   DateTime currentDate = DateTime.now();
   Future<void> selectToDate(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
-      
         context: context,
         initialDate: currentDate,
         firstDate: DateTime(1800),
@@ -59,10 +58,10 @@ class _LeaveFormState extends State<LeaveForm> {
 
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String email;
-  bool _isLoading=false;
-  bool _isTeaching=false;
-bool _isToDateValid=true;
-bool _isFromDateValid=true;
+  bool _isLoading = false;
+  bool _isTeaching = false;
+  bool _isToDateValid = true;
+  bool _isFromDateValid = true;
 
   getData() async {
     if (mounted)
@@ -445,15 +444,14 @@ bool _isFromDateValid=true;
                                     ),
                                   ),
                                   controller: toDateCon,
-                                   validator: (value) {
+                                  validator: (value) {
                                     if (value.isEmpty) {
-                                      _isToDateValid=false;
+                                      _isToDateValid = false;
                                       return 'Please select To Date';
                                     }
                                     return null;
                                   },
-                                  enabled: _isToDateValid? false:true,
-                                 
+                                  enabled: _isToDateValid ? false : true,
                                 ),
                               ),
                               SizedBox(
@@ -479,15 +477,14 @@ bool _isFromDateValid=true;
                                     ),
                                   ),
                                   controller: fromDateCon,
-                                   validator: (value) {
+                                  validator: (value) {
                                     if (value.isEmpty) {
-                                     _isFromDateValid=false;
+                                      _isFromDateValid = false;
                                       return 'Please select From Date';
-                                      
                                     }
                                     return null;
                                   },
-                                  enabled:_isFromDateValid? false:true,
+                                  enabled: _isFromDateValid ? false : true,
                                 ),
                               ),
                             ],
@@ -510,7 +507,7 @@ bool _isFromDateValid=true;
                                 }
                                 return;
                               }
-                             
+
                               leaveObject.title = titleCon.text;
                               leaveObject.des = desCon.text;
                               leaveObject.toDate = toDateCon.text;

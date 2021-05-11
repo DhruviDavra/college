@@ -45,7 +45,6 @@ class StudentProvider extends ChangeNotifier {
           .collection("tbl_student")
           .where("email", isEqualTo: studentData.docs[i].data()["email"])
           .where("sem", isEqualTo: s)
-          .where("div", isEqualTo: "A")
           .orderBy("rno")
           .get();
 
@@ -72,42 +71,6 @@ Future<StudentObject>emailofStudentBySemAndRno(String sem, String div, int rno) 
       }
       return studData;
   }
-
-//   List<StudentObject> listDocument;
-//  QuerySnapshot collectionState;
-//     fetchDocuments(Query collection){
-//     collection.get().then((value) {
-//       collectionState = value; // store collection state to set where to start next
-//       value.docs.forEach((element) {
-//         print('getDocuments ${element.data()}');
-//         listDocument.add(studentObjectFromJson(
-//             json.encode(element.data())));
-
-//       });
-//     });
-//   }
-//   Future<void> getDocuments() async {
-//     listDocument = List();
-//     var collection = FirebaseFirestore.instance
-//         .collection('tbl_student')
-//         .orderBy("rno")
-//         .limit(15);
-//     print('getDocuments');
-//     fetchDocuments(collection);
-//   }
-
-  // Fetch next 5 documents starting from the last document fetched earlier
-  // Future<void> getDocumentsNext() async {
-  //   // Get the last visible document
-  //   var lastVisible = collectionState.docs[collectionState.docs.length-1];
-  //   print('listDocument legnth: ${collectionState.size} last: $lastVisible');
-
-  //   var collection = FirebaseFirestore.instance
-  //       .collection('tbl_student')
-  //       .orderBy("rno").startAfterDocument(lastVisible).limit(5);
-
-  //   fetchDocuments(collection);
-  // }
 
   Future<List<UserInfoObj>> getUserDetailOfA(String s) async {
     QuerySnapshot studentData = await FirebaseFirestore.instance
@@ -250,6 +213,15 @@ Future<StudentObject>emailofStudentBySemAndRno(String sem, String div, int rno) 
         .get();
     return studentObjectFromJson(json.encode(querySnapshot.docs.first.data()));
   }
+  
+   Future<String> getStudentEmail(String erno) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("enrollno", isEqualTo: erno)
+        .get();
+      
+    return querySnapshot.docs.first.data()["email"];
+  }
 
   getParticularUser(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -257,6 +229,14 @@ Future<StudentObject>emailofStudentBySemAndRno(String sem, String div, int rno) 
         .where("email", isEqualTo: email)
         .get();
     return userInfoObjFromJson(json.encode(querySnapshot.docs.first.data()));
+  }
+
+ getParticularStudentForResult(String erno) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("enrollno", isEqualTo: erno)
+        .get();
+    return studentObjectFromJson(json.encode(querySnapshot.docs.first.data()));
   }
 
   countStudent() async {
@@ -274,4 +254,24 @@ Future<StudentObject>emailofStudentBySemAndRno(String sem, String div, int rno) 
 
     return querySnapshot.docs.length;
   }
+
+
+ Future<String>  getSemester() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("email", isEqualTo: profileEmail)
+        .get();
+
+    return querySnapshot.docs.first.data()["sem"];
+  }
+  
+ Future<String>  getEnrollment() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_student")
+        .where("email", isEqualTo: profileEmail)
+        .get();
+
+    return querySnapshot.docs.first.data()["enrollno"];
+  }
+
 }

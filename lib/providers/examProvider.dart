@@ -15,15 +15,17 @@ class ExamProvider extends ChangeNotifier {
 
   List<ExamObject> examDetails = [];
   List<ExamObject> allData = [];
-List<String> erno=[];
+  List<String> erno = [];
   // String studentEmail;
   // String uploadtime;
   // String email;
   // String time;
   // bool isStudent = false;
   String sem;
+  String semForResult;
   String etype;
-  List<int> subCode=[];
+  List<int> subCode = [];
+  List<int> credit = [];
 
   addInternalDetails(ExamObject examObject) {
     createInternalExamTable();
@@ -38,7 +40,7 @@ List<String> erno=[];
     });
   }
 
-   addExternalDetails(ExamObject examObject) {
+  addExternalDetails(ExamObject examObject) {
     createExternalExamTable();
     FirebaseFirestore.instance.collection("tbl_externalExam").add({
       "erno": examObject.erno,
@@ -51,48 +53,53 @@ List<String> erno=[];
     });
   }
 
- Future<List<int>>  getSubCodeSemWise(String sem) async {
-   subCode.clear();
+  Future<List<int>> getSubCodeSemWise(String sem) async {
+    subCode.clear();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("tbl_subject")
         .where("sem", isEqualTo: sem)
         .orderBy("subCode")
         .get();
 
- for (int i = 0; i < querySnapshot.docs.length; i++) {
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
       subCode.add(querySnapshot.docs[i].data()["subCode"]);
     } //for
-   return subCode;
+    return subCode;
   }
 
+  Future<List<int>> getCreditSemWise(String sem) async {
+    credit.clear();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_subject")
+        .where("sem", isEqualTo: sem)
+        .orderBy("subCode")
+        .get();
 
- Future<List<String>>  getErnoSemWise(String sem) async {
-   erno.clear();
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      credit.add(querySnapshot.docs[i].data()["credit"]);
+    } //for
+    return credit;
+  }
+
+  Future<List<String>> getErnoSemWise(String sem) async {
+    erno.clear();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("tbl_student")
         .where("sem", isEqualTo: sem)
         .orderBy("rno")
         .get();
 
- for (int i = 0; i < querySnapshot.docs.length; i++) {
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
       erno.add(querySnapshot.docs[i].data()["enrollno"]);
     } //for
-   return erno;
+    return erno;
   }
 
-
-  // getParticularfeedback(String uploadtime) async {
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //       .collection("tbl_feedback")
-  //       .where("time", isEqualTo: uploadtime)
-  //       .get();
-  //   return examObjectFromJson(json.encode(querySnapshot.docs.first.data()));
-  // }
-
-  Future<List<ExamObject>> allInternal() async {
+  Future<List<ExamObject>> allInternalSemWise() async {
     allData.clear();
     QuerySnapshot data = await FirebaseFirestore.instance
         .collection("tbl_internalExam")
+        .where("sem", isEqualTo: semForResult)
         .orderBy("erno")
         .get();
     for (int i = 0; i < data.docs.length; i++) {
@@ -101,33 +108,53 @@ List<String> erno=[];
     return allData;
   }
 
-  // getParticularfeedbackStudentWise(String time) async {
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //       .collection("tbl_feedback")
-  //       .where("time", isEqualTo: time)
-  //       .get();
-  //   return feedbackObjectFromJson(json.encode(querySnapshot.docs.first.data()));
-  // }
+  Future<List<ExamObject>> allExternalSemWise() async {
+    allData.clear();
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("tbl_externalExam")
+        .where("sem", isEqualTo: semForResult)
+        .orderBy("erno")
+        .get();
+    for (int i = 0; i < data.docs.length; i++) {
+      allData.add(examObjectFromJson(json.encode(data.docs[i].data())));
+    } //for
+    return allData;
+  }
 
-  // Future<List<FeedbackObject>> getFeedbackDetailStudentWise(
-  //     String email) async {
-  //       feedbackStudentWise.clear();
-  //   print(email);
-  //   QuerySnapshot feedbackData = await FirebaseFirestore.instance
-  //       .collection("tbl_feedback")
-  //       .where("email", isEqualTo: email)
-  //       .get();
-  //   for (int i = 0; i < feedbackData.docs.length; i++) {
-  //     //  print(feedbackData.docs[i].data()["email"]);
-  //     feedbackStudentWise.add(
-  //         feedbackObjectFromJson(json.encode(feedbackData.docs[i].data())));
-  //   } //for
-  //   return feedbackStudentWise;
-  // }
+ Future<List<ExamObject>> userFromInternal() async {
+    allData.clear();
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("tbl_externalExam")
+        .where("sem", isEqualTo: semForResult)
+        .orderBy("erno")
+        .get();
+    for (int i = 0; i < data.docs.length; i++) {
+      allData.add(examObjectFromJson(json.encode(data.docs[i].data())));
+    } //for
+    return allData;
+  }
 
-  // countFeedback() async {
-  //   QuerySnapshot countFeedback =
-  //       await FirebaseFirestore.instance.collection("tbl_feedback").get();
-  //   return countFeedback.docs.length.toString();
-  // }
+
+  getInternalMarks(String erno) async {
+    ExamObject examObject = ExamObject();
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("tbl_internalExam")
+        .where("erno", isEqualTo: erno)
+        .get();
+
+    examObject = (examObjectFromJson(json.encode(data.docs.first.data())));
+    return examObject;
+  }
+
+  Future<ExamObject> getExternalMarks(String erno) async {
+    ExamObject examObject = ExamObject();
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("tbl_externalExam")
+        .where("erno", isEqualTo: erno)
+        .get();
+
+    examObject = (examObjectFromJson(json.encode(data.docs.first.data())));
+
+    return examObject;
+  }
 }

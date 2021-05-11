@@ -13,13 +13,16 @@ import 'package:provider/provider.dart';
 import 'package:college_management_system/objects/bookObject.dart';
 import 'package:college_management_system/providers/bookProvider.dart';
 
-
 class Book extends StatefulWidget {
   @override
   _BookState createState() => _BookState();
 }
 
 class _BookState extends State<Book> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -37,7 +40,7 @@ class _BookState extends State<Book> {
   String sem;
   String subject;
 
-  BookObject bookObject =BookObject();
+  BookObject bookObject = BookObject();
 
   Future getPdfAndUpload() async {
     File file = await FilePicker.getFile(
@@ -78,9 +81,8 @@ class _BookState extends State<Book> {
     semesterDetail.clear();
     semester.clear();
     bookDetails.clear();
-    bookDetails =
-        await Provider.of<BookProvider>(context, listen: false)
-            .getBooksDetail();
+    bookDetails = await Provider.of<BookProvider>(context, listen: false)
+        .getBooksDetail();
 
     semester = await Provider.of<SemesterProvider>(context, listen: false)
         .getSemesterDetail();
@@ -131,7 +133,6 @@ class _BookState extends State<Book> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-             
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: Center(
@@ -158,7 +159,7 @@ class _BookState extends State<Book> {
                                 padding: const EdgeInsets.all(7.0),
                                 child: InkWell(
                                   onTap: () {
-                                     Provider.of<BookProvider>(context,
+                                    Provider.of<BookProvider>(context,
                                             listen: false)
                                         .particularBook = bookDetails[i];
                                     Navigator.of(context).push(
@@ -173,8 +174,8 @@ class _BookState extends State<Book> {
                                             MediaQuery.of(context).size.width *
                                                 0.01,
                                       ),
-                                      Text("Title: "+
-                                        bookDetails[i].title,
+                                      Text(
+                                        "Title: " + bookDetails[i].title,
                                         style: TextStyle(
                                           fontSize: 18,
                                         ),
@@ -218,54 +219,65 @@ class _BookState extends State<Book> {
                     return SingleChildScrollView(
                       child: Container(
                         margin: EdgeInsets.all(5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Syllabus Details",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.04,
-                            ),
-                            Text(
-                              "Title",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: "Enter Title",
+                        child: Form(
+                          key: _key,
+                          autovalidateMode: autovalidateMode,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
-                              controller: titleCon,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Upload File Here",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                await getPdfAndUpload();
-                              },
-                              child: TextField(
+                              Text(
+                                "E-Book Details",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                              ),
+                              Text(
+                                "Title",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(),
+                                  ),
+                                  hintText: "Enter Title",
+                                ),
+                                controller: titleCon,
+                                validator: (value){
+                                  if(value.isEmpty){
+                                    return 'Please enter Title';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                "Upload File Here",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
                                 decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
@@ -273,122 +285,146 @@ class _BookState extends State<Book> {
                                     borderSide: new BorderSide(),
                                   ),
                                   hintText: "Tap Here to Load PDF",
-                                  enabled: false,
+                                 
                                 ),
                                 controller: filenameCon,
+                                 validator: (value){
+                                if(value.isEmpty){
+                                  return 'Please Select PDF file to upload';
+                                }
+                                return null;
+                              },
+                               onTap: () async {
+                                await getPdfAndUpload();
+                              },
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Semester",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: DropdownButton<String>(
-                                hint: Text("Select Semester"),
-                                value: sem,
-                                items: semesterDetail.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      sem = value;
-                                      fetchSubject();
-                                    });
-                                  }
-                                },
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Subject",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: DropdownButton<String>(
-                                hint: Text("Select Subject"),
-                                value: subject,
-                                items: subjectDetail.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      subject = value;
-                                    });
-                                  }
-                                },
+                              Text(
+                                "Semester",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Semester"),
+                                  value: sem,
+                                  items: semesterDetail.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        sem = value;
+                                        fetchSubject();
+                                      });
+                                    }
+                                  },
                                 ),
-                                color: Colors.blueGrey,
-                                onPressed: () async {
-                                  filepath =
-                                      await Provider.of<BookProvider>(
-                                              context,
-                                              listen: false)
-                                          .uploadFile(filename, file1);
-                                  if (filepath != null) {
-                                    bookObject.title = titleCon.text;
-                                    bookObject.subject = subject;
-                                    bookObject.sem = sem;
-                                    bookObject.docname = filenameCon.text;
-                                    bookObject.time = DateTime.now()
-                                        .toUtc()
-                                        .millisecondsSinceEpoch;
-                                    bookObject.path = filepath;
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                "Subject",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Subject"),
+                                  value: subject,
+                                  items: subjectDetail.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        subject = value;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  color: Colors.blueGrey,
+                                  onPressed: () async {
+                                    if (!_key.currentState.validate()) {
+                                      if (mounted) {
+                                        setState(() {
+                                          autovalidateMode =
+                                              AutovalidateMode.always;
+                                        });
+                                      }
+                                      return;
+                                    }
 
-                                    print(bookObject.title);
-                                    print(bookObject.subject);
-                                    print(bookObject.sem);
-                                    print(bookObject.docname);
-                                    print(bookObject.time);
-
-                                    Provider.of<BookProvider>(context,
+                                    filepath = await Provider.of<BookProvider>(
+                                            context,
                                             listen: false)
-                                        .addBook(bookObject);
-                                    Navigator.of(context).pop();
-                                    fetchData();
-                                  }
-                                },
-                                child: Text(
-                                  "Upload Document",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
+                                        .uploadFile(filename, file1);
+                                    if (filepath != null) {
+                                      bookObject.title = titleCon.text;
+                                      bookObject.subject = subject;
+                                      bookObject.sem = sem;
+                                      bookObject.docname = filenameCon.text;
+                                      bookObject.time = DateTime.now()
+                                          .toUtc()
+                                          .millisecondsSinceEpoch;
+                                      bookObject.path = filepath;
+
+                                      print(bookObject.title);
+                                      print(bookObject.subject);
+                                      print(bookObject.sem);
+                                      print(bookObject.docname);
+                                      print(bookObject.time);
+
+                                      Provider.of<BookProvider>(context,
+                                              listen: false)
+                                          .addBook(bookObject);
+                                      Navigator.of(context).pop();
+                                      fetchData();
+                                    }
+                                  },
+                                  child: Text(
+                                    "Upload Document",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -403,8 +439,6 @@ class _BookState extends State<Book> {
   Widget editDeleteButton(int i) {
     return Row(
       children: [
-       
-      
         InkWell(
           onTap: () {
             showDialog(
@@ -417,8 +451,8 @@ class _BookState extends State<Book> {
                           onPressed: () {
                             setState(() {
                               print(bookDetails[i].time);
-                              Provider.of<BookProvider>(context,
-                                      listen: false).deleteBook(bookDetails[i]);
+                              Provider.of<BookProvider>(context, listen: false)
+                                  .deleteBook(bookDetails[i]);
                               bookDetails.clear();
                               semester.clear();
                               setState(() {

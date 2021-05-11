@@ -9,11 +9,14 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   TextEditingController emailCon = TextEditingController();
 
   @override
@@ -37,67 +40,90 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           body: SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                  ),
-                  Text(
-                    "Forgot Password",
-                    style: TextStyle(fontSize: 30, color: Colors.blueGrey,),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                  Text(
-                      "Please enter your email address,we will email you a link to reaset your password"),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                  ),
-                  Text(
-                    "  Email",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                      hintText: "abc@gmail.com",
+              child: Form(
+                key: _key,
+                autovalidateMode: autovalidateMode,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.1,
                     ),
-                    controller: emailCon,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        color: Colors.blueGrey[600],
-                        onPressed: () async {
-                          try {
-                            await Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .passwordReset(emailCon.text);
-                            Navigator.of(context).pop();
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                        child: Text(
-                          "Send Email",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
+                    Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.blueGrey,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    Text(
+                        "Please enter your email address,we will email you a link to reaset your password"),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                    ),
+                    Text(
+                      "  Email",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        hintText: "abc@gmail.com",
+                      ),
+                      controller: emailCon,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter Email';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.08,
+                    ),
+                    Center(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          color: Colors.blueGrey[600],
+                          onPressed: () async {
+                              if (!_key.currentState.validate()) {
+                                if (mounted) {
+                                  setState(() {
+                                    autovalidateMode = AutovalidateMode.always;
+                                  });
+                                }
+                                return;
+                              }
+
+                            try {
+                              await Provider.of<UserProvider>(context,
+                                      listen: false)
+                                  .passwordReset(emailCon.text);
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              print(e);
+                            }
+                          },
+                          child: Text(
+                            "Send Email",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

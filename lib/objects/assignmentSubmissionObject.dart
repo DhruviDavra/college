@@ -18,7 +18,7 @@ class AssignmentSubmissionObject {
         this.sem,
     });
 
-    String time;
+    int time;
     String email;
     String title;
     String subject;

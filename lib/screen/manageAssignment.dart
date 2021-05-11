@@ -13,13 +13,16 @@ import 'package:provider/provider.dart';
 import 'package:college_management_system/objects/assignmentObject.dart';
 import 'package:college_management_system/providers/assignmentProvider.dart';
 
-
 class Assignment extends StatefulWidget {
   @override
   _AssignmentState createState() => _AssignmentState();
 }
 
 class _AssignmentState extends State<Assignment> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .pop(MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -133,7 +136,6 @@ class _AssignmentState extends State<Assignment> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-            
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: Center(
@@ -160,13 +162,14 @@ class _AssignmentState extends State<Assignment> {
                                 padding: const EdgeInsets.all(7.0),
                                 child: InkWell(
                                   onTap: () {
-                                     Provider.of<AssignmentProvider>(context,
-                                            listen: false)
-                                        .particularAssignment = assignmentDetail[i];
+                                    Provider.of<AssignmentProvider>(context,
+                                                listen: false)
+                                            .particularAssignment =
+                                        assignmentDetail[i];
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                              AssignmentDetail()));
+                                                AssignmentDetail()));
                                   },
                                   child: Row(
                                     children: [
@@ -175,8 +178,8 @@ class _AssignmentState extends State<Assignment> {
                                             MediaQuery.of(context).size.width *
                                                 0.01,
                                       ),
-                                      Text("Title: "+
-                                        assignmentDetail[i].title,
+                                      Text(
+                                        "Title: " + assignmentDetail[i].title,
                                         style: TextStyle(
                                           fontSize: 18,
                                         ),
@@ -220,96 +223,125 @@ class _AssignmentState extends State<Assignment> {
                     return SingleChildScrollView(
                       child: Container(
                         margin: EdgeInsets.all(5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Syllabus Details",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.04,
-                            ),
-                            Text(
-                              "Title",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: "Enter Title",
+                        child: Form(
+                          key: _key,
+                          autovalidateMode: autovalidateMode,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
-                              controller: titleCon,
-                            ),
-                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.04,
-                            ),
-                            Text(
-                              "Description",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: "Enter Description",
+                              Text(
+                                "Assignment Details",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              controller: desCon,
-                            ),
-                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.04,
-                            ),
-                            Text(
-                              "Assignment Number",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            TextField(
-                              decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: "Enter Assignment No",
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
                               ),
-                              controller: asnoCon,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Upload File Here",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                await getPdfAndUpload();
-                              },
-                              child: TextField(
+                              Text(
+                                "Title",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(),
+                                  ),
+                                  hintText: "Enter Title",
+                                ),
+                                controller: titleCon,
+                                validator: (value){
+                                  if(value.isEmpty){
+                                    return 'Please enter Title';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                              ),
+                              Text(
+                                "Description",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(),
+                                  ),
+                                  hintText: "Enter Description",
+                                ),
+                                controller: desCon,
+                                 validator: (value){
+                                  if(value.isEmpty){
+                                    return 'Please enter Description';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.04,
+                              ),
+                              Text(
+                                "Assignment Number",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(),
+                                  ),
+                                  hintText: "Enter Assignment No",
+                                ),
+                                controller: asnoCon,
+                                 validator: (value){
+                                  if(value.isEmpty){
+                                    return 'Please enter Assignment number';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                "Upload File Here",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
                                 decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
@@ -317,124 +349,149 @@ class _AssignmentState extends State<Assignment> {
                                     borderSide: new BorderSide(),
                                   ),
                                   hintText: "Tap Here to Load PDF",
-                                  enabled: false,
-                                ),
+                                   ),
                                 controller: filenameCon,
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Semester",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: DropdownButton<String>(
-                                hint: Text("Select Semester"),
-                                value: sem,
-                                items: semesterDetail.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      sem = value;
-                                      fetchSubject();
-                                    });
-                                  }
+                                 validator: (value){
+                                if(value.isEmpty){
+                                  return 'Please Select PDF to upload';
+                                }
+                                return null;
+                              },
+                               onTap: () async {
+                                  await getPdfAndUpload();
                                 },
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Text(
-                              "Subject",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: DropdownButton<String>(
-                                hint: Text("Select Subject"),
-                                value: subject,
-                                items: subjectDetail.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  if (mounted) {
-                                    setState(() {
-                                      subject = value;
-                                    });
-                                  }
-                                },
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                              Text(
+                                "Semester",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Semester"),
+                                  value: sem,
+                                  items: semesterDetail.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        sem = value;
+                                        fetchSubject();
+                                      });
+                                    }
+                                  },
                                 ),
-                                color: Colors.blueGrey,
-                                onPressed: () async {
-                                  filepath =
-                                      await Provider.of<AssignmentProvider>(
-                                              context,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Text(
+                                "Subject",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: DropdownButton<String>(
+                                  hint: Text("Select Subject"),
+                                  value: subject,
+                                  items: subjectDetail.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        subject = value;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  color: Colors.blueGrey,
+                                  onPressed: () async {
+                                    if (!_key.currentState.validate()) {
+                                      if (mounted) {
+                                        setState(() {
+                                          autovalidateMode =
+                                              AutovalidateMode.always;
+                                        });
+                                      }
+                                      return;
+                                    }
+                                    filepath =
+                                        await Provider.of<AssignmentProvider>(
+                                                context,
+                                                listen: false)
+                                            .uploadFile(filename, file1);
+                                    if (filepath != null) {
+                                      assignmentObject.title = titleCon.text;
+                                      assignmentObject.subject = subject;
+                                      assignmentObject.sem = sem;
+                                      assignmentObject.docname =
+                                          filenameCon.text;
+                                      assignmentObject.time = DateTime.now()
+                                          .toUtc()
+                                          .millisecondsSinceEpoch;
+                                      assignmentObject.path = filepath;
+                                      assignmentObject.des = desCon.text;
+                                      assignmentObject.asno =
+                                          int.parse(asnoCon.text);
+
+                                      print(assignmentObject.title);
+                                      print(assignmentObject.subject);
+                                      print(assignmentObject.sem);
+                                      print(assignmentObject.docname);
+                                      print(assignmentObject.time);
+
+                                      Provider.of<AssignmentProvider>(context,
                                               listen: false)
-                                          .uploadFile(filename, file1);
-                                  if (filepath != null) {
-                                    assignmentObject.title = titleCon.text;
-                                    assignmentObject.subject = subject;
-                                    assignmentObject.sem = sem;
-                                    assignmentObject.docname = filenameCon.text;
-                                    assignmentObject.time = DateTime.now()
-                                        .toUtc()
-                                        .millisecondsSinceEpoch;
-                                    assignmentObject.path = filepath;
-                                    assignmentObject.des=desCon.text;
-                                    assignmentObject.asno=int.parse(asnoCon.text) ;
-
-                                    print(assignmentObject.title);
-                                    print(assignmentObject.subject);
-                                    print(assignmentObject.sem);
-                                    print(assignmentObject.docname);
-                                    print(assignmentObject.time);
-
-                                    Provider.of<AssignmentProvider>(context,
-                                            listen: false)
-                                        .addAssignment(assignmentObject);
-                                    Navigator.of(context).pop();
-                                    fetchData();
-                                  }
-                                },
-                                child: Text(
-                                  "Upload Document",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
+                                          .addAssignment(assignmentObject);
+                                      Navigator.of(context).pop();
+                                      fetchData();
+                                    }
+                                  },
+                                  child: Text(
+                                    "Upload Document",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -449,8 +506,6 @@ class _AssignmentState extends State<Assignment> {
   Widget editDeleteButton(int i) {
     return Row(
       children: [
-       
-      
         InkWell(
           onTap: () {
             showDialog(
@@ -464,7 +519,8 @@ class _AssignmentState extends State<Assignment> {
                             setState(() {
                               print(assignmentDetail[i].time);
                               Provider.of<AssignmentProvider>(context,
-                                      listen: false).deleteAssignment(assignmentDetail[i]);
+                                      listen: false)
+                                  .deleteAssignment(assignmentDetail[i]);
                               assignmentDetail.clear();
                               semester.clear();
                               setState(() {

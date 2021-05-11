@@ -2,6 +2,7 @@ import 'package:college_management_system/providers/feedbackProvider.dart';
 import 'package:college_management_system/providers/leaveProvider.dart';
 import 'package:college_management_system/screen/contactUs.dart';
 import 'package:college_management_system/screen/homeScreen.dart';
+import 'package:college_management_system/screen/studentCircular.dart';
 import 'package:college_management_system/screen/studentFeedback.dart';
 import 'package:college_management_system/screen/studentLeave.dart';
 import 'package:college_management_system/screen/studentNotice.dart';
@@ -14,11 +15,11 @@ import 'package:college_management_system/objects/usersObject.dart';
 import 'package:provider/provider.dart';
 import 'package:college_management_system/providers/userProvider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'studentAttendanceSubject.dart';
 import 'studentAssignment.dart';
-import 'studentAttendance.dart';
 import 'studentEbook.dart';
 import 'studentSyllabus.dart';
+import 'studentExamResult.dart';
 
 class StudentHome extends StatefulWidget {
   @override
@@ -57,6 +58,7 @@ class _StudentHomeState extends State<StudentHome> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            centerTitle: true,
             title: Text('TMTBCA'),
             backgroundColor: Colors.blueGrey[700],
           ),
@@ -776,7 +778,7 @@ class _StudentHomeState extends State<StudentHome> {
             ),
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StudentAttendance()));
+                  MaterialPageRoute(builder: (context) => StudentAttendanceSub()));
             },
           ),
           ListTile(
@@ -837,6 +839,36 @@ class _StudentHomeState extends State<StudentHome> {
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => StudentSyllabus()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.book_sharp,
+            ),
+            title: Text(
+              'Circulars',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentCircular()));
+            },
+          ),
+            ListTile(
+            leading: Icon(
+              Icons.book_online,
+            ),
+            title: Text(
+              'Exam Result',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentExam()));
             },
           ),
           ListTile(

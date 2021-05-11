@@ -16,11 +16,13 @@ class AdminNotice extends StatefulWidget {
 
 class _AdminNoticeState extends State<AdminNotice> {
   bool _isLoading = false;
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   void navigateToPage(BuildContext context) async {
     noticeAll.clear();
-    Navigator.of(context)
-        .pop();
+    Navigator.of(context).pop();
   }
 
   File file1;
@@ -60,7 +62,7 @@ class _AdminNoticeState extends State<AdminNotice> {
       setState(() {
         _isLoading = true;
       });
-noticeAll.clear();
+    noticeAll.clear();
     noticeAll = await Provider.of<NoticeProvider>(context, listen: false)
         .getNoticeDetail();
 
@@ -113,17 +115,17 @@ noticeAll.clear();
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.90,
                     child: _isLoading
-                        ?Column(
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.4,
-                                ),
-                                SpinKitChasingDots(
-                                  color: Colors.blueGrey,
-                                ),
-                              ],
-                            )
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                              ),
+                              SpinKitChasingDots(
+                                color: Colors.blueGrey,
+                              ),
+                            ],
+                          )
                         : ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: noticeAll.length,
@@ -141,42 +143,54 @@ noticeAll.clear();
                                             builder: (context) =>
                                                 NoticeDetail()));
                                   },
-                                  child: Row(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text("Upload Date: "+
-                                            epochToLocal(noticeAll[i].time),
+                                          Text(
+                                            "Upload Date: " +
+                                                epochToLocal(noticeAll[i].time),
                                             style: TextStyle(
                                               fontSize: 18,
                                             ),
                                           ),
-                                          Text("\n" + noticeAll[i].docname),
+                                          Spacer(),
+                                          InkWell(
+                                            onTap: () {
+                                              Provider.of<NoticeProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .deleteNotice(noticeAll[i]);
+                                              fetchData();
+                                            },
+                                            child: Image.asset(
+                                              'assets/images/delete.png',
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.04,
+                                            ),
+                                          ),
                                         ],
                                       ),
-                                      Spacer(),
-                                      InkWell(
-                                        onTap: () {
-                                          Provider.of<NoticeProvider>(context,
-                                                  listen: false)
-                                              .deleteNotice(noticeAll[i]);
-                                              fetchData();
-                                        },
-                                        child: Image.asset(
-                                          'assets/images/delete.png',
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.04,
+                                      Text(
+                                        "Doc Name :  " + noticeAll[i].docname,
+                                        style: TextStyle(
+                                          fontSize: 16,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
                                 height:
-                                    MediaQuery.of(context).size.height * 0.1,
+                                    MediaQuery.of(context).size.height * 0.16,
                                 width: MediaQuery.of(context).size.width * 0.01,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -209,25 +223,26 @@ noticeAll.clear();
                     return SingleChildScrollView(
                       child: Container(
                         margin: EdgeInsets.all(5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.0,
-                            ),
-                            Text(
-                              "Upload File Here",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                await getPdfAndUpload();
-                              },
-                              child: TextField(
+                        child: Form(
+                          key: _key,
+                          autovalidateMode: autovalidateMode,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.0,
+                              ),
+                              Text(
+                                "Upload File Here",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              TextFormField(
                                 decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
@@ -235,57 +250,79 @@ noticeAll.clear();
                                     borderSide: new BorderSide(),
                                   ),
                                   hintText: "Tap Here to Load PDF",
-                                  enabled: false,
+                                
                                 ),
                                 controller: filenameCon,
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.06,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                color: Colors.blueGrey,
-                                onPressed: () async {
-                                  filepath = await Provider.of<NoticeProvider>(
-                                          context,
-                                          listen: false)
-                                      .uploadFile(filename, file1);
-                                  if (filepath != null) {
-                                    noticeObject.docname = filename;
-                                    noticeObject.spath = filepath;
-
-                                    noticeObject.time = DateTime.now()
-                                        .toUtc()
-                                        .millisecondsSinceEpoch;
-
-                                    print(noticeObject.docname);
-                                    print(noticeObject.spath);
-                                    print(noticeObject.time);
-
-                                    Provider.of<NoticeProvider>(context,
-                                            listen: false)
-                                        .addNotice(noticeObject);
-                                    Navigator.of(context).pop();
-                                    fetchData();
-                                  }
+                                onTap: ()async{
+                                   await getPdfAndUpload();
                                 },
-                                child: Text(
-                                  "Upload Document",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
+                                validator: (value){
+                                  if(value.isEmpty){
+                                    return 'Please select PDF File for Notice ';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  color: Colors.blueGrey,
+                                  onPressed: () async {
+                                    if (!_key.currentState.validate()) {
+                                      if (mounted) {
+                                        setState(() {
+                                          autovalidateMode =
+                                              AutovalidateMode.always;
+                                        });
+                                      }
+                                      return;
+                                    }
+                                    filepath =
+                                        await Provider.of<NoticeProvider>(
+                                                context,
+                                                listen: false)
+                                            .uploadFile(filename, file1);
+                                    if (filepath != null) {
+                                      noticeObject.docname = filename;
+                                      noticeObject.spath = filepath;
+
+                                      noticeObject.time = DateTime.now()
+                                          .toUtc()
+                                          .millisecondsSinceEpoch;
+
+                                      print(noticeObject.docname);
+                                      print(noticeObject.spath);
+                                      print(noticeObject.time);
+
+                                      Provider.of<NoticeProvider>(context,
+                                              listen: false)
+                                          .addNotice(noticeObject);
+                                      Navigator.of(context).pop();
+                                      fetchData();
+                                    }
+                                  },
+                                  child: Text(
+                                    "Upload Document",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

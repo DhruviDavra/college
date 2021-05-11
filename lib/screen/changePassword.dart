@@ -10,6 +10,9 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+
+  
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   void navigateToPage(BuildContext context) async {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => AdminHome()));
@@ -21,6 +24,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController oldPwdCon = TextEditingController();
   TextEditingController newPwdCon = TextEditingController();
   TextEditingController reNewPwdCon = TextEditingController();
+AutovalidateMode autovalidateMode=AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -43,152 +47,183 @@ class _ChangePasswordState extends State<ChangePassword> {
           body: SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.07,
-                  ),
-                  Center(
-                    child: Text(
-                      "Change Password",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.blueGrey,
+              child: Form(
+                key: _key,
+                autovalidateMode: autovalidateMode,
+                              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.07,
+                    ),
+                    Center(
+                      child: Text(
+                        "Change Password",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.blueGrey,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  Text(
-                      "To Change Your Password, Please fill in the fields below:"),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  Text(
-                    "  Current Password",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                  TextField(
-                    obscureText: !this._showPassword,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.remove_red_eye,
-                          color: this._showPassword ? Colors.blue : Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(
-                              () => this._showPassword = !this._showPassword);
-                        },
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                      hintText: "Enter Current Password",
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
-                    controller: oldPwdCon,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                  Text(
-                    "  New Password",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                  TextField(
-                    obscureText: !this._showPassword1,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.remove_red_eye,
-                          color:
-                              this._showPassword1 ? Colors.blue : Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(
-                              () => this._showPassword1 = !this._showPassword1);
-                        },
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                      hintText: "Enter New Password",
+                    Text(
+                        "To Change Your Password, Please fill in the fields below:"),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
                     ),
-                    controller: newPwdCon,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                  ),
-                  Text(
-                    "  Re-Enter Password",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                  TextField(
-                    obscureText: !this._showPassword2,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.remove_red_eye,
-                          color:
-                              this._showPassword2 ? Colors.blue : Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(
-                              () => this._showPassword2 = !this._showPassword2);
-                        },
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                      hintText: "Re-enter Password",
+                    Text(
+                      "  Current Password",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    controller: reNewPwdCon,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    TextFormField(
+                      obscureText: !this._showPassword,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: this._showPassword ? Colors.blue : Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(
+                                () => this._showPassword = !this._showPassword);
+                          },
                         ),
-                        color: Colors.blueGrey[600],
-                        onPressed: () {
-                          print(oldPwdCon.text);
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        hintText: "Enter Current Password",
+                      ),
+                      controller: oldPwdCon,
+                       validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please Enter Current Password';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+                    Text(
+                      "  New Password",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    TextFormField(
+                      obscureText: !this._showPassword1,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color:
+                                this._showPassword1 ? Colors.blue : Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(
+                                () => this._showPassword1 = !this._showPassword1);
+                          },
+                        ),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        hintText: "Enter New Password",
+                      ),
+                      controller: newPwdCon,
+                        validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please Enter New Password';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                    ),
+                    Text(
+                      "  Re-Enter Password",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    TextFormField(
+                      obscureText: !this._showPassword2,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color:
+                                this._showPassword2 ? Colors.blue : Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(
+                                () => this._showPassword2 = !this._showPassword2);
+                          },
+                        ),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        hintText: "Re-enter Password",
+                      ),
+                      controller: reNewPwdCon,
+                        validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please Enter Re-enter Password';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.08,
+                    ),
+                    Center(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          color: Colors.blueGrey[600],
+                          onPressed: () {
+                              if (!_key.currentState.validate()) {
+                                  if (mounted) {
+                                    setState(() {
+                                      autovalidateMode = AutovalidateMode.always;
+                                    });
+                                  }
+                                  return;
+                                }
 
-                          print(newPwdCon.text);
+                            print(oldPwdCon.text);
 
-                          print(reNewPwdCon.text);
-                          if (newPwdCon.text != reNewPwdCon.text) {
-                            print("no match");
-                          } else {
-                            Provider.of<UserProvider>(context, listen: false)
-                                .changePassword(newPwdCon.text);
+                            print(newPwdCon.text);
 
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => AdminHome(),
-                            ));
-                          }
-                        },
-                        child: Text(
-                          "Submit",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                            print(reNewPwdCon.text);
+                            if (newPwdCon.text != reNewPwdCon.text) {
+                              print("no match");
+                            } else {
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .changePassword(newPwdCon.text);
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AdminHome(),
+                              ));
+                            }
+                          },
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

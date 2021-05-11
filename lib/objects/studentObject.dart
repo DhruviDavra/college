@@ -26,6 +26,7 @@ class StudentObject {
     String sem;
     String acadamicYear;
     String name;
+    String feeStatus;
 
     factory StudentObject.fromJson(Map<String, dynamic> json) => StudentObject(
         rno: json["rno"],

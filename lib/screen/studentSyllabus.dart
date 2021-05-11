@@ -95,6 +95,7 @@ class _StudentSyllabusState extends State<StudentSyllabus> {
         child: Scaffold(
           backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[700],
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),

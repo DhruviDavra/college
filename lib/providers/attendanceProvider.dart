@@ -9,10 +9,11 @@ class AttendanceProvider extends ChangeNotifier {
   }
 
   List<AttendanceObject> attendanceDetails = [];
-   List<AttendanceObject> particularDate = [];
+  List<AttendanceObject> particularDate = [];
   String detailTime;
   String selectedSem;
   int selectedSub;
+  int selectedSubjectForStudent;
   String date;
   String studentEmail;
 
@@ -26,31 +27,40 @@ class AttendanceProvider extends ChangeNotifier {
     });
   }
 
- Future<List<AttendanceObject>> findAttendance(String date) async {
+  Future<List<AttendanceObject>> findAttendance(String date) async {
+    print("date: " + date);
     QuerySnapshot data = await FirebaseFirestore.instance
         .collection("tbl_attendance")
         .where("time", isEqualTo: date)
+        .where("subCode", isEqualTo: selectedSubjectForStudent)
         .get();
-    for (int i = 0; i < data.docs.length; i++) {
-      // print(seminarData.docs[i].data()["email"]);
-      particularDate
-          .add(attendanceObjectFromJson(json.encode(data.docs[i].data())));
-    } //for
+    print(data.docs.length);
+    particularDate = data.docs
+        .map((e) => attendanceObjectFromJson(json.encode(e.data())))
+        .toList();
+
     return particularDate;
   }
 
-   Future<List<AttendanceObject>> allFeedback() async {
-     particularDate.clear();
-    QuerySnapshot feedbackData = await FirebaseFirestore.instance
+   Future<List<AttendanceObject>> getAttendanceSubjectWise(int subject) async {
+     QuerySnapshot data = await FirebaseFirestore.instance
         .collection("tbl_attendance")
-        .orderBy("time")
+        .where("subCode", isEqualTo: subject)
         .get();
-    for (int i = 0; i < feedbackData.docs.length; i++) {
-       particularDate
-          .add(attendanceObjectFromJson(json.encode(feedbackData.docs[i].data())));
-    } //for
+    print(data.docs.length);
+    particularDate = data.docs
+        .map((e) => attendanceObjectFromJson(json.encode(e.data())))
+        .toList();
+
     return particularDate;
   }
 
+  Future<String> getSubjectname() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("tbl_subject")
+        .where("subCode", isEqualTo: selectedSubjectForStudent)
+        .get();
 
+    return querySnapshot.docs.first.data()["subName"];
+  }
 }

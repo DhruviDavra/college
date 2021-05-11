@@ -67,7 +67,7 @@ class _AttendanceSemState extends State<AttendanceSem> {
                 navigateToPage(context);
               },
             ),
-            title: Text('Students'),
+            title: Text('Select Semester and Division'),
           ),
           body: SingleChildScrollView(
             child: Container(
@@ -138,7 +138,7 @@ class _AttendanceSemState extends State<AttendanceSem> {
                                                       context,
                                                       listen: false)
                                                   .div = "A";
-                                            ///  print("A");
+                                              print("A");
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (context) =>
